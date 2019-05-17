@@ -1,5 +1,6 @@
 ##Ignored stuff
 
+/.idea
 /gradle
 /.gradle
 /build
