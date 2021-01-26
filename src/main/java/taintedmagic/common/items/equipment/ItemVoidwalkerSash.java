@@ -20,10 +20,11 @@ import thaumcraft.common.items.armor.Hover;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.lib.PlayerHandler;
+import travellersgear.api.IActiveAbility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpingGear, IBauble
+public class ItemVoidwalkerSash extends ItemRunic implements IActiveAbility, IRunicArmor, IWarpingGear, IBauble
 {
     public static final String TAG_MODE = "mode";
 
@@ -159,15 +160,19 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
     {
         if (!w.isRemote && p.isSneaking())
         {
-            if (s.stackTagCompound == null)
-            {
-                s.setTagCompound(new NBTTagCompound());
-                s.stackTagCompound.setBoolean(TAG_MODE, false);
-            }
-            if (s.stackTagCompound != null)
-                s.stackTagCompound.setBoolean(TAG_MODE, !s.stackTagCompound.getBoolean(TAG_MODE));
+            toggle(s);
         }
         return s;
+    }
+
+    private void toggle(ItemStack s) {
+        if (s.stackTagCompound == null)
+        {
+            s.setTagCompound(new NBTTagCompound());
+            s.stackTagCompound.setBoolean(TAG_MODE, false);
+        }
+        if (s.stackTagCompound != null)
+            s.stackTagCompound.setBoolean(TAG_MODE, !s.stackTagCompound.getBoolean(TAG_MODE));
     }
 
     public boolean hasSpeedBoost(ItemStack s)
@@ -175,5 +180,17 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         if (s.stackTagCompound == null) return true;
 
         else return s.stackTagCompound.getBoolean(TAG_MODE);
+    }
+
+    @Override
+    public boolean canActivate(EntityPlayer entityPlayer, ItemStack itemStack, boolean b) {
+        return true;
+    }
+
+    @Override
+    public void activate(EntityPlayer entityPlayer, ItemStack itemStack) {
+        if (!entityPlayer.worldObj.isRemote) {
+            toggle(itemStack);
+        }
     }
 }
