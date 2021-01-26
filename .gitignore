@@ -10,3 +10,7 @@
 /eclipse
 /bin
 /run
+*.bat
+TaintedMagic.iml
+TaintedMagic.ipr
+TaintedMagic.iws
