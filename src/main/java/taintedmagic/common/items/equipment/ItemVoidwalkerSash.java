@@ -2,6 +2,8 @@ package taintedmagic.common.items.equipment;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import baubles.api.BaublesApi;
+import baubles.common.container.InventoryBaubles;
 import travellersgear.api.IActiveAbility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.EntityLivingBase;
@@ -134,6 +136,7 @@ public class ItemVoidwalkerSash extends ItemRunic implements IActiveAbility, IRu
     public void activate(EntityPlayer entityPlayer, ItemStack itemStack) {
         if (!entityPlayer.worldObj.isRemote) {
             toggle(itemStack);
+            ((InventoryBaubles)BaublesApi.getBaubles(entityPlayer)).syncSlotToClients(3);
         }
     }
 }
