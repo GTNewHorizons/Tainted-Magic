@@ -119,9 +119,12 @@ public class ItemFocusTime extends ItemFocusBasic
     {
         ItemWandCasting wand = (ItemWandCasting) s.getItem();
 
-        if (wand.consumeAllVis(s, p, getVisCost(s), true, false))
-        {
-            w.setWorldTime(w.isDaytime() ? 14000 : 24000);
+        if (wand.consumeAllVis(s, p, getVisCost(s), true, false) && (w.provider.dimensionId == 0)) {
+            long wt = w.provider.getWorldTime();
+            long mwt = (wt % 24000);
+            long to = ((mwt < 14000) ? 14000 : 0) - mwt;
+            w.setWorldTime(wt + to + ((to < 0) ? 0 : 24000));
+
             p.playSound("thaumcraft:runicShieldCharge", 0.3F, 1.0F + w.rand.nextFloat() * 0.5F);
             p.playSound("thaumcraft:wand", 0.3F, 1.0F + w.rand.nextFloat() * 0.5F);
 
