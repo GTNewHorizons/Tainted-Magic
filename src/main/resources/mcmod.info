@@ -1,11 +1,11 @@
 [
 {
-  "modid": "TaintedMagic",
-  "name": "Tainted Magic",
-  "description": "A TC4 addon that brings you to the dark side of Thaumaturgy...",
-  "version": "r7.6",
-  "mcversion": "1.7.10",
-  "url": "http://bitly.com/1HV2VSK",
+  "modid": "${modId}",
+  "name": "${modName}",
+  "description": "Tainted Magic is an addon to Thaumcraft 4 which focuses on the dark side of Thaumaturgy.",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/tainted-magic",
   "updateUrl": "",
   "authorList": ["John Yorke (yorkeMC)"],
   "credits": "John Yorke (yorkeMC), and special thanks to FastieTheWolf and RapidMelons",

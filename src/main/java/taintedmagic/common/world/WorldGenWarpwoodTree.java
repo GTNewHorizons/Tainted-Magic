@@ -63,7 +63,7 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree
 	int leafDistanceLimit = 4;
 	/** Contains a list of a points at which to generate groups of leaves. */
 	int[][] leafNodes;
-	private static final String __OBFID = "CL_00000400";
+	/**private static final String __OBFID = "CL_00000400";*/
 
 	public WorldGenWarpwoodTree (boolean b, Block trunk, Block leaves)
 	{
