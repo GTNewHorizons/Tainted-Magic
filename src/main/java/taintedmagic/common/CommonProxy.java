@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import taintedmagic.client.handler.SashServerHandler;
 import taintedmagic.common.handler.ConfigHandler;
 import taintedmagic.common.handler.TMEventHandler;
 import taintedmagic.common.handler.UpdateHandler;
@@ -58,6 +59,10 @@ public class CommonProxy {
 
     public EntityPlayer getClientPlayer () {
         return null;
+    }
+
+    public boolean isSashEnabled(EntityPlayer player) {
+        return SashServerHandler.isSashEnabled(player);
     }
 
     public World getClientWorld () {

@@ -1,6 +1,8 @@
 #Tainted Magic Russian (RU) localization by Pinger
 
-itemGroup.TaintedMagic=Мракобесие
+itemGroup.TaintedMagic=Tainted Magic
+tmisc.keyCategory=Tainted Magic
+tmisc.toggleSash=Переключить эффект рунного пояса Странника Бездны
 
 text.creation=Голоса стихают... Вы чувствуете, как ваше сознание проясняется.
 
