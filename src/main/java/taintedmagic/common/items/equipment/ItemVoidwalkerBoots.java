@@ -139,7 +139,7 @@ public class ItemVoidwalkerBoots extends ItemArmor
             if (player.onGround || player.capabilities.isFlying) {
                 float bonus = 0.12F;
                 final ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
-                if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash && ItemVoidwalkerSash.isSpeedEnabled(sash)) {
+                if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash && TaintedMagic.proxy.isSashEnabled(player)) {
                     bonus *= 2.0F;
                 }
 
@@ -168,7 +168,7 @@ public class ItemVoidwalkerBoots extends ItemArmor
             if (boots != null && boots.getItem() == ItemRegistry.ItemVoidwalkerBoots) {
                 player.motionY *= 1.25D;
             }
-            if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash && ItemVoidwalkerSash.isSpeedEnabled(sash)) {
+            if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash && TaintedMagic.proxy.isSashEnabled(player)) {
                 player.motionY *= 1.05D;
             }
         }

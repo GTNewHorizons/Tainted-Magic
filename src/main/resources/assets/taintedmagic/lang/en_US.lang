@@ -1,6 +1,8 @@
 #Tainted Magic English (US) localization
 
 itemGroup.TaintedMagic=Tainted Magic
+tmisc.keyCategory=Tainted Magic
+tmisc.toggleSash=Toggle Voidwalker's Sash of Runic Shielding
 
 text.creation=The voices become silent... you suddenly experience complete clarity.
 
