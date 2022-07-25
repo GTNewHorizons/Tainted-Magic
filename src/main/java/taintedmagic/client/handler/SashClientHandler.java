@@ -5,11 +5,11 @@ import net.minecraft.util.StatCollector;
 
 public class SashClientHandler {
 
-    private static boolean stashEnabled = true;
+    private static boolean sashEnabled = true;
 
     public static void toggle() {
-       stashEnabled = !stashEnabled;
-        if (stashEnabled) {
+       sashEnabled = !sashEnabled;
+        if (sashEnabled) {
             HUDHandler.displayString(EnumChatFormatting.GREEN + StatCollector.translateToLocal("text.sash.speed.on"),
                     300, false);
         } else {
@@ -19,6 +19,6 @@ public class SashClientHandler {
     }
 
     public static boolean isEnabled() {
-        return stashEnabled;
+        return sashEnabled;
     }
 }
