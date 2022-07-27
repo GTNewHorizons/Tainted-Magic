@@ -31,10 +31,7 @@ public class SashKeyListener {
 
             final ItemStack sash = PlayerHandler.getPlayerBaubles(Minecraft.getMinecraft().thePlayer).getStackInSlot(3);
             if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash) {
-
-                SashClientHandler.toggle();
                 PacketHandler.INSTANCE.sendToServer(new PacketSashToggle());
-
             }
         }
     }

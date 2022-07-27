@@ -13,7 +13,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import taintedmagic.client.handler.ClientHandler;
 import taintedmagic.client.handler.HUDHandler;
-import taintedmagic.client.handler.SashClientHandler;
 import taintedmagic.client.handler.SashKeyListener;
 import taintedmagic.client.renderer.RenderEntityDiffusion;
 import taintedmagic.client.renderer.RenderEntityHomingShard;
@@ -70,10 +69,6 @@ public class ClientProxy extends CommonProxy {
         return Minecraft.getMinecraft().thePlayer;
     }
 
-    @Override
-    public boolean isSashEnabled(EntityPlayer player) {
-        return SashClientHandler.isEnabled();
-    }
 
     @Override
     public World getClientWorld () {
