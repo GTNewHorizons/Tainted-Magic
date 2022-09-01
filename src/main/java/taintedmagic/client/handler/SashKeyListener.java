@@ -18,7 +18,8 @@ import taintedmagic.common.network.PacketSashToggle;
 @SideOnly(Side.CLIENT)
 public class SashKeyListener {
 
-    private static final KeyBinding toggleSash = new KeyBinding("tmisc.toggleSash", Keyboard.CHAR_NONE, "tmisc.keyCategory");
+    private static final KeyBinding toggleSash =
+            new KeyBinding("tmisc.toggleSash", Keyboard.CHAR_NONE, "tmisc.keyCategory");
 
     public SashKeyListener() {
         FMLCommonHandler.instance().bus().register(this);
@@ -29,7 +30,8 @@ public class SashKeyListener {
     public void keyUp(InputEvent.KeyInputEvent event) {
         if (toggleSash.isPressed()) {
 
-            final ItemStack sash = PlayerHandler.getPlayerBaubles(Minecraft.getMinecraft().thePlayer).getStackInSlot(3);
+            final ItemStack sash = PlayerHandler.getPlayerBaubles(Minecraft.getMinecraft().thePlayer)
+                    .getStackInSlot(3);
             if (sash != null && sash.getItem() instanceof ItemVoidwalkerSash) {
                 PacketHandler.INSTANCE.sendToServer(new PacketSashToggle());
             }

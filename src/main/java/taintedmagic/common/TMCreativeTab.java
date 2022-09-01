@@ -1,7 +1,6 @@
 package taintedmagic.common;
 
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,12 +12,12 @@ import thaumcraft.common.items.wands.ItemWandCasting;
 
 public class TMCreativeTab extends CreativeTabs {
 
-    public TMCreativeTab () {
+    public TMCreativeTab() {
         super(TaintedMagic.MOD_ID);
     }
 
     @Override
-    public void displayAllReleventItems (final List list) {
+    public void displayAllReleventItems(final List list) {
         super.displayAllReleventItems(list);
 
         final ItemStack stack = new ItemStack(ConfigItems.itemWandCasting);
@@ -54,7 +53,7 @@ public class TMCreativeTab extends CreativeTabs {
     }
 
     @Override
-    public ItemStack getIconItemStack () {
+    public ItemStack getIconItemStack() {
         final ItemStack stack = new ItemStack(ConfigItems.itemWandCasting);
         final ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
@@ -65,7 +64,7 @@ public class TMCreativeTab extends CreativeTabs {
     }
 
     @Override
-    public Item getTabIconItem () {
+    public Item getTabIconItem() {
         return null;
     }
 }

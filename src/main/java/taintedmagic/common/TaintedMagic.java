@@ -1,8 +1,5 @@
 package taintedmagic.common;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -13,21 +10,27 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.EnumHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod (modid = TaintedMagic.MOD_ID, name = TaintedMagic.MOD_NAME, version = TaintedMagic.VERSION,
+@Mod(
+        modid = TaintedMagic.MOD_ID,
+        name = TaintedMagic.MOD_NAME,
+        version = TaintedMagic.VERSION,
         dependencies = TaintedMagic.DEPENDENCIES)
 public class TaintedMagic {
 
     public static final String MOD_ID = "TaintedMagic";
     public static final String MOD_NAME = "Tainted Magic";
     public static final String VERSION = "GRADLETOKEN_VERSION";
-    public static final String DEPENDENCIES = "required-after:Forge@[10.13.4.1448,);required-after:Thaumcraft@[4.2.3.5,)";
+    public static final String DEPENDENCIES =
+            "required-after:Forge@[10.13.4.1448,);required-after:Thaumcraft@[4.2.3.5,)";
 
-    @Mod.Instance ("TaintedMagic")
+    @Mod.Instance("TaintedMagic")
     public static TaintedMagic instance;
 
     // Proxies
-    @SidedProxy (clientSide = "taintedmagic.client.ClientProxy", serverSide = "taintedmagic.common.CommonProxy")
+    @SidedProxy(clientSide = "taintedmagic.client.ClientProxy", serverSide = "taintedmagic.common.CommonProxy")
     public static CommonProxy proxy;
 
     // TM creative tab
@@ -41,21 +44,21 @@ public class TaintedMagic {
 
     // Pre init
     @EventHandler
-    public static void preInit (final FMLPreInitializationEvent event) {
+    public static void preInit(final FMLPreInitializationEvent event) {
         logger.info("Pre-initializing Tainted Magic!");
         proxy.preInit(event);
     }
 
     // Init
     @EventHandler
-    public static void init (final FMLInitializationEvent event) {
+    public static void init(final FMLInitializationEvent event) {
         logger.info("Initializing Tainted Magic!");
         proxy.init(event);
     }
 
     // Post init
     @EventHandler
-    public static void postInit (final FMLPostInitializationEvent event) {
+    public static void postInit(final FMLPostInitializationEvent event) {
         logger.info("Post-initializing Tainted Magic!");
         proxy.postInit(event);
         logger.info("Loading complete!");
