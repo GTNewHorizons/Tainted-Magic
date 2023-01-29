@@ -7,9 +7,10 @@ import net.minecraft.client.model.ModelRenderer;
  * Saya model - created by <wiiv> using Tabula 4.1.1
  */
 public class ModelSaya extends ModelBase {
+
     public ModelRenderer saya;
 
-    public ModelSaya () {
+    public ModelSaya() {
         textureWidth = 32;
         textureHeight = 64;
 
@@ -18,14 +19,14 @@ public class ModelSaya extends ModelBase {
         saya.addBox(-1.0F, 0.5F, -2.0F, 2, 48, 4, 0.0F);
     }
 
-    public void render (final float size) {
+    public void render(final float size) {
         saya.render(size);
     }
 
     /**
      * This is a helper function from Tabula to set the rotation of model parts
      */
-    public void setRotation (final ModelRenderer m, final float x, final float y, final float z) {
+    public void setRotation(final ModelRenderer m, final float x, final float y, final float z) {
         m.rotateAngleX = x;
         m.rotateAngleY = y;
         m.rotateAngleZ = z;

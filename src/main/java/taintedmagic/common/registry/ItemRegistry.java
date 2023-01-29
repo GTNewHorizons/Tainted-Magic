@@ -1,6 +1,5 @@
 package taintedmagic.common.registry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -9,6 +8,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
+
 import taintedmagic.common.handler.WandHandler;
 import taintedmagic.common.items.ItemCrimsonBlood;
 import taintedmagic.common.items.ItemFlyteCharm;
@@ -48,6 +48,7 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemRegistry {
 
@@ -113,7 +114,7 @@ public class ItemRegistry {
 
     public static Item ItemKatana;
 
-    public static void initItems () {
+    public static void initItems() {
         ItemMaterial = new ItemMaterial();
         GameRegistry.registerItem(ItemMaterial, "ItemMaterial");
 
@@ -145,20 +146,20 @@ public class ItemRegistry {
         ItemWarpedGoggles = new ItemWarpedGoggles(TMMaterials.ARMOR_WARPED, 4, 0);
         GameRegistry.registerItem(ItemWarpedGoggles, "ItemWarpedGoggles");
 
-        ItemVoidFortressHelmet =
-                new ItemVoidFortressArmor(TMMaterials.ARMOR_VOIDFORTRESS, 4, 0).setUnlocalizedName("ItemVoidFortressHelmet");
+        ItemVoidFortressHelmet = new ItemVoidFortressArmor(TMMaterials.ARMOR_VOIDFORTRESS, 4, 0)
+                .setUnlocalizedName("ItemVoidFortressHelmet");
         GameRegistry.registerItem(ItemVoidFortressHelmet, "ItemVoidFortressHelmet");
 
         ItemVoidFortressChestplate = new ItemVoidFortressArmor(TMMaterials.ARMOR_VOIDFORTRESS, 4, 1)
                 .setUnlocalizedName("ItemVoidFortressChestplate");
         GameRegistry.registerItem(ItemVoidFortressChestplate, "ItemVoidFortressChestplate");
 
-        ItemVoidFortressLeggings =
-                new ItemVoidFortressArmor(TMMaterials.ARMOR_VOIDFORTRESS, 4, 2).setUnlocalizedName("ItemVoidFortressLeggings");
+        ItemVoidFortressLeggings = new ItemVoidFortressArmor(TMMaterials.ARMOR_VOIDFORTRESS, 4, 2)
+                .setUnlocalizedName("ItemVoidFortressLeggings");
         GameRegistry.registerItem(ItemVoidFortressLeggings, "ItemVoidFortressLeggings");
 
-        ItemVoidwalkerBoots =
-                new ItemVoidwalkerBoots(TMMaterials.ARMOR_VOIDWALKER, 4, 3).setUnlocalizedName("ItemVoidwalkerBoots");
+        ItemVoidwalkerBoots = new ItemVoidwalkerBoots(TMMaterials.ARMOR_VOIDWALKER, 4, 3)
+                .setUnlocalizedName("ItemVoidwalkerBoots");
         GameRegistry.registerItem(ItemVoidwalkerBoots, "ItemVoidwalkerBoots");
 
         ItemVoidwalkerSash = new ItemVoidwalkerSash();
@@ -186,11 +187,21 @@ public class ItemRegistry {
         ItemWandRod = new ItemWandRod();
         GameRegistry.registerItem(ItemWandRod, "ItemWandRod");
 
-        WAND_ROD_WARPWOOD = new WandRod("warpwood", 250, new ItemStack(ItemWandRod, 1, 0), 16, new WandHandler(),
+        WAND_ROD_WARPWOOD = new WandRod(
+                "warpwood",
+                250,
+                new ItemStack(ItemWandRod, 1, 0),
+                16,
+                new WandHandler(),
                 new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
         WAND_ROD_WARPWOOD.setGlowing(true);
 
-        STAFF_ROD_WARPWOOD = new StaffRod("warpwood", 500, new ItemStack(ItemWandRod, 1, 1), 20, new WandHandler(),
+        STAFF_ROD_WARPWOOD = new StaffRod(
+                "warpwood",
+                500,
+                new ItemStack(ItemWandRod, 1, 1),
+                20,
+                new WandHandler(),
                 new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
         STAFF_ROD_WARPWOOD.setRunes(true);
         STAFF_ROD_WARPWOOD.setGlowing(true);
@@ -199,16 +210,19 @@ public class ItemRegistry {
         GameRegistry.registerItem(ItemWandCap, "ItemWandCap");
 
         WAND_CAP_SHADOWMETAL = new WandCap("shadowmetal", 0.65F, new ItemStack(ItemWandCap, 1, 0), 12);
-        WAND_CAP_SHADOWMETAL.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOWMETAL.png"));
+        WAND_CAP_SHADOWMETAL
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOWMETAL.png"));
 
         WAND_CAP_CLOTH = new WandCap("cloth", 0.97F, new ItemStack(ItemWandCap, 1, 1), 2);
         WAND_CAP_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CLOTH.png"));
 
         WAND_CAP_CRIMSON_CLOTH = new WandCap("crimsoncloth", 0.93F, new ItemStack(ItemWandCap, 1, 2), 3);
-        WAND_CAP_CRIMSON_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
+        WAND_CAP_CRIMSON_CLOTH
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
 
         WAND_CAP_SHADOW_CLOTH = new WandCap("shadowcloth", 0.93F, new ItemStack(ItemWandCap, 1, 3), 4);
-        WAND_CAP_SHADOW_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
+        WAND_CAP_SHADOW_CLOTH
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
 
         // Foci
         ItemFocusTaintSwarm = new ItemFocusTaintSwarm();

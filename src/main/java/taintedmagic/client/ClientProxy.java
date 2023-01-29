@@ -1,16 +1,11 @@
 package taintedmagic.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+
 import taintedmagic.client.handler.ClientHandler;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.client.handler.SashClientHandler;
@@ -24,27 +19,33 @@ import taintedmagic.common.entities.EntityDiffusion;
 import taintedmagic.common.entities.EntityHomingShard;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.client.renderers.entity.RenderEldritchOrb;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void preInit (final FMLPreInitializationEvent event) {
+    public void preInit(final FMLPreInitializationEvent event) {
         super.preInit(event);
     }
 
     @Override
-    public void init (final FMLInitializationEvent event) {
+    public void init(final FMLInitializationEvent event) {
         super.init(event);
         registerRenderers();
     }
 
     @Override
-    public void postInit (final FMLPostInitializationEvent event) {
+    public void postInit(final FMLPostInitializationEvent event) {
         super.postInit(event);
     }
 
     @Override
-    public void registerHandlers () {
+    public void registerHandlers() {
         super.registerHandlers();
 
         MinecraftForge.EVENT_BUS.register(new HUDHandler());
@@ -55,7 +56,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerRenderers () {
+    public void registerRenderers() {
         // Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkMatter.class, new RenderEldritchOrb());
         RenderingRegistry.registerEntityRenderingHandler(EntityHomingShard.class, new RenderEntityHomingShard());
@@ -66,7 +67,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public EntityPlayer getClientPlayer () {
+    public EntityPlayer getClientPlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
 
@@ -76,7 +77,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public World getClientWorld () {
+    public World getClientWorld() {
         return FMLClientHandler.instance().getClient().theWorld;
     }
 }

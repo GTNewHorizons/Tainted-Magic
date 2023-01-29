@@ -2,6 +2,7 @@ package taintedmagic.client.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+
 import taintedmagic.common.TaintedMagic;
 
 public final class SashServerHandler {
@@ -11,8 +12,7 @@ public final class SashServerHandler {
 
     private static NBTTagCompound getCompound(EntityPlayer player) {
         NBTTagCompound cmp = player.getEntityData();
-        if (!cmp.hasKey(COMPOUND))
-            cmp.setTag(COMPOUND, new NBTTagCompound());
+        if (!cmp.hasKey(COMPOUND)) cmp.setTag(COMPOUND, new NBTTagCompound());
 
         return cmp.getCompoundTag(COMPOUND);
     }

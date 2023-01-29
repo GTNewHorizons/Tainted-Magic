@@ -1,7 +1,7 @@
 package taintedmagic.common.registry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+
 import taintedmagic.common.blocks.BlockLumos;
 import taintedmagic.common.blocks.BlockNightshadeBush;
 import taintedmagic.common.blocks.BlockWarpwoodLeaves;
@@ -9,6 +9,7 @@ import taintedmagic.common.blocks.BlockWarpwoodLog;
 import taintedmagic.common.blocks.BlockWarpwoodPlanks;
 import taintedmagic.common.blocks.BlockWarpwoodSapling;
 import taintedmagic.common.blocks.tile.TileLumos;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegistry {
 
@@ -19,7 +20,7 @@ public class BlockRegistry {
     public static Block BlockNightshadeBush;
     public static Block BlockLumos;
 
-    public static void initBlocks () {
+    public static void initBlocks() {
         BlockWarpwoodLog = new BlockWarpwoodLog();
         GameRegistry.registerBlock(BlockWarpwoodLog, "BlockWarpwoodLog");
 
@@ -39,7 +40,7 @@ public class BlockRegistry {
         GameRegistry.registerBlock(BlockLumos, "BlockLumos");
     }
 
-    public static void initTiles () {
+    public static void initTiles() {
         GameRegistry.registerTileEntity(TileLumos.class, "TileLumos");
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import thaumcraft.common.entities.projectile.EntityEldritchOrb;
 
 public class EntityDarkMatter extends EntityEldritchOrb {
@@ -17,11 +18,11 @@ public class EntityDarkMatter extends EntityEldritchOrb {
     private int enlarge;
     private boolean corrosive;
 
-    public EntityDarkMatter (final World world) {
+    public EntityDarkMatter(final World world) {
         super(world);
     }
 
-    public EntityDarkMatter (final World world, final EntityLivingBase entity, final float dmg, final int enlarge,
+    public EntityDarkMatter(final World world, final EntityLivingBase entity, final float dmg, final int enlarge,
             final boolean corrosive) {
         super(world, entity);
         this.dmg = dmg;
@@ -30,16 +31,16 @@ public class EntityDarkMatter extends EntityEldritchOrb {
     }
 
     @Override
-    public boolean shouldRenderInPass (final int pass) {
+    public boolean shouldRenderInPass(final int pass) {
         return pass == 1;
     }
 
     @Override
-    protected void onImpact (final MovingObjectPosition mop) {
+    protected void onImpact(final MovingObjectPosition mop) {
         if (!worldObj.isRemote && getThrower() != null) {
             final double expand = 1.5D + enlarge * 0.5D;
-            final List<Entity> entities =
-                    worldObj.getEntitiesWithinAABBExcludingEntity(getThrower(), boundingBox.expand(expand, expand, expand));
+            final List<Entity> entities = worldObj
+                    .getEntitiesWithinAABBExcludingEntity(getThrower(), boundingBox.expand(expand, expand, expand));
 
             for (final Entity e : entities) {
                 if (e instanceof EntityLivingBase) {

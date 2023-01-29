@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import taintedmagic.common.registry.BlockRegistry;
 import thaumcraft.common.lib.world.WorldGenCustomFlowers;
 
@@ -24,7 +25,7 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
     private final int randomTreeHeight;
     boolean worldgen = false;
 
-    public WorldGenWarpwoodTree (final boolean doBlockNotify, final int minTreeHeight, final int randomTreeHeight) {
+    public WorldGenWarpwoodTree(final boolean doBlockNotify, final int minTreeHeight, final int randomTreeHeight) {
         super(doBlockNotify);
         worldgen = !doBlockNotify;
         this.minTreeHeight = minTreeHeight;
@@ -34,11 +35,10 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
     }
 
     @Override
-    public boolean generate (final World world, final Random random, final int x, final int y, final int z) {
+    public boolean generate(final World world, final Random random, final int x, final int y, final int z) {
         final int height = random.nextInt(randomTreeHeight) + minTreeHeight;
         boolean flag = true;
-        if (y < 1 || y + height + 1 > 256)
-            return false;
+        if (y < 1 || y + height + 1 > 256) return false;
         for (int i1 = y; i1 <= y + 1 + height; ++i1) {
             byte spread = 1;
             if (i1 == y) {
@@ -54,23 +54,22 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
                     if (i1 >= 0 && i1 < 256) {
                         final Block block = world.getBlock(j1, i1, k1);
                         if (!block.isAir(world, j1, i1, k1) && !block.isLeaves(world, j1, i1, k1)
-                                && !block.isReplaceable(world, j1, i1, k1) && i1 > y) {
+                                && !block.isReplaceable(world, j1, i1, k1)
+                                && i1 > y) {
                             flag = false;
                         }
-                    }
-                    else {
+                    } else {
                         flag = false;
                     }
                 }
             }
         }
 
-        if (!flag)
-            return false;
+        if (!flag) return false;
         final Block block1 = world.getBlock(x, y - 1, z);
-        final boolean isSoil = block1.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (BlockSapling) Blocks.sapling);
-        if (!isSoil || y >= 256 - height - 1)
-            return false;
+        final boolean isSoil = block1
+                .canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (BlockSapling) Blocks.sapling);
+        if (!isSoil || y >= 256 - height - 1) return false;
         block1.onPlantGrow(world, x, y - 1, z, x, y, z);
         final int start = y + height - 5;
         final int end = y + height + 3 + random.nextInt(3);
@@ -86,7 +85,8 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
                     final double d5 = zz - z;
                     final double dist = d3 * d3 + d4 * d4 + d5 * d5;
 
-                    if (dist < 10 + random.nextInt(8) && world.getBlock(xx, k2, zz).canBeReplacedByLeaves(world, xx, k2, zz)) {
+                    if (dist < 10 + random.nextInt(8)
+                            && world.getBlock(xx, k2, zz).canBeReplacedByLeaves(world, xx, k2, zz)) {
                         setBlockAndNotifyAdequately(world, xx, k2, zz, leaves, 1);
                     }
                 }
@@ -107,8 +107,7 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
             if (k2 > 0 && !lastblock && random.nextInt(chance) == 0) {
                 setBlockAndNotifyAdequately(world, x, y + k2, z, trunk, 2);
                 lastblock = true;
-            }
-            else {
+            } else {
                 setBlockAndNotifyAdequately(world, x, y + k2, z, trunk, 0);
                 lastblock = false;
                 chance--;
