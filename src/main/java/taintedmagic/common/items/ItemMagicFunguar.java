@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.Thaumcraft;
@@ -19,55 +20,51 @@ import thaumcraft.common.lib.research.ResearchManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemMagicFunguar extends ItemFood
-{
-	Aspect[] aspects = new Aspect[]{
-			Aspect.AIR,
-			Aspect.EARTH,
-			Aspect.FIRE,
-			Aspect.WATER,
-			Aspect.ORDER,
-			Aspect.ENTROPY };
+public class ItemMagicFunguar extends ItemFood {
 
-	public ItemMagicFunguar (int i, float j, boolean k)
-	{
-		super(i, j, k);
-		this.setCreativeTab(TaintedMagic.tabTaintedMagic);
-		this.setTextureName("taintedmagic:ItemMagicFunguar");
-		this.setAlwaysEdible();
-		this.setUnlocalizedName("ItemMagicFunguar");
-	}
+    Aspect[] aspects = new Aspect[] { Aspect.AIR, Aspect.EARTH, Aspect.FIRE, Aspect.WATER, Aspect.ORDER,
+            Aspect.ENTROPY };
 
-	@Override
-	protected void onFoodEaten (ItemStack s, World w, EntityPlayer p)
-	{
-		super.onFoodEaten(s, w, p);
+    public ItemMagicFunguar(int i, float j, boolean k) {
+        super(i, j, k);
+        this.setCreativeTab(TaintedMagic.tabTaintedMagic);
+        this.setTextureName("taintedmagic:ItemMagicFunguar");
+        this.setAlwaysEdible();
+        this.setUnlocalizedName("ItemMagicFunguar");
+    }
 
-		Random r = new Random();
-		try
-		{
-			p.addPotionEffect(new PotionEffect(Potion.regeneration.id, 200, 2));
-			p.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 100, 2));
-			p.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 100, 2));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+    @Override
+    protected void onFoodEaten(ItemStack s, World w, EntityPlayer p) {
+        super.onFoodEaten(s, w, p);
 
-		int i = r.nextInt(aspects.length);
+        Random r = new Random();
+        try {
+            p.addPotionEffect(new PotionEffect(Potion.regeneration.id, 200, 2));
+            p.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 100, 2));
+            p.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 100, 2));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		if (!w.isRemote)
-		{
-			Thaumcraft.proxy.playerKnowledge.addAspectPool(p.getCommandSenderName(), aspects[i], Short.valueOf((short) (1)));
-			ResearchManager.scheduleSave(p);
-			PacketHandler.INSTANCE.sendTo(new PacketAspectPool(aspects[i].getTag(), Short.valueOf((short) 1), Short.valueOf(Thaumcraft.proxy.playerKnowledge.getAspectPoolFor(p.getCommandSenderName(), aspects[i]))), (EntityPlayerMP) p);
-		}
-	}
+        int i = r.nextInt(aspects.length);
 
-	@SideOnly (Side.CLIENT)
-	public EnumRarity getRarity (ItemStack itemstack)
-	{
-		return EnumRarity.uncommon;
-	}
+        if (!w.isRemote) {
+            Thaumcraft.proxy.playerKnowledge
+                    .addAspectPool(p.getCommandSenderName(), aspects[i], Short.valueOf((short) (1)));
+            ResearchManager.scheduleSave(p);
+            PacketHandler.INSTANCE.sendTo(
+                    new PacketAspectPool(
+                            aspects[i].getTag(),
+                            Short.valueOf((short) 1),
+                            Short.valueOf(
+                                    Thaumcraft.proxy.playerKnowledge
+                                            .getAspectPoolFor(p.getCommandSenderName(), aspects[i]))),
+                    (EntityPlayerMP) p);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public EnumRarity getRarity(ItemStack itemstack) {
+        return EnumRarity.uncommon;
+    }
 }

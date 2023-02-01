@@ -1,6 +1,7 @@
 package taintedmagic.common.registry;
 
 import net.minecraft.block.Block;
+
 import taintedmagic.common.blocks.BlockShadowOre;
 import taintedmagic.common.blocks.BlockShadowmetal;
 import taintedmagic.common.blocks.BlockWarpwoodLeaves;
@@ -11,39 +12,38 @@ import taintedmagic.common.items.blocks.ItemBlockShadowOre;
 import taintedmagic.common.items.blocks.ItemBlockWarpwoodSapling;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class BlockRegistry
-{
-	public static void init ()
-	{
-		// Shadow Ore
-		BlockShadowOre = new BlockShadowOre();
-		GameRegistry.registerBlock(BlockShadowOre, ItemBlockShadowOre.class, "BlockShadowOre");
+public class BlockRegistry {
 
-		// Warpwood Log
-		BlockWarpwoodLog = new BlockWarpwoodLog();
-		GameRegistry.registerBlock(BlockWarpwoodLog, "BlockWarpwoodLog");
+    public static void init() {
+        // Shadow Ore
+        BlockShadowOre = new BlockShadowOre();
+        GameRegistry.registerBlock(BlockShadowOre, ItemBlockShadowOre.class, "BlockShadowOre");
 
-		// Block of Shadowmetal
-		BlockShadowmetal = new BlockShadowmetal();
-		GameRegistry.registerBlock(BlockShadowmetal, "BlockShadowmetal");
+        // Warpwood Log
+        BlockWarpwoodLog = new BlockWarpwoodLog();
+        GameRegistry.registerBlock(BlockWarpwoodLog, "BlockWarpwoodLog");
 
-		// Warpwood Planks
-		BlockWarpwoodPlanks = new BlockWarpwoodPlanks();
-		GameRegistry.registerBlock(BlockWarpwoodPlanks, "BlockWarpwoodPlanks");
+        // Block of Shadowmetal
+        BlockShadowmetal = new BlockShadowmetal();
+        GameRegistry.registerBlock(BlockShadowmetal, "BlockShadowmetal");
 
-		// Warpwood Leaves
-		BlockWarpwoodLeaves = new BlockWarpwoodLeaves();
-		GameRegistry.registerBlock(BlockWarpwoodLeaves, "BlockWarpwoodLeaves");
+        // Warpwood Planks
+        BlockWarpwoodPlanks = new BlockWarpwoodPlanks();
+        GameRegistry.registerBlock(BlockWarpwoodPlanks, "BlockWarpwoodPlanks");
 
-		// Warpwood Sapling
-		BlockWarpwoodSapling = new BlockWarpwoodSapling();
-		GameRegistry.registerBlock(BlockWarpwoodSapling, ItemBlockWarpwoodSapling.class, "BlockWarpwoodSapling");
-	}
+        // Warpwood Leaves
+        BlockWarpwoodLeaves = new BlockWarpwoodLeaves();
+        GameRegistry.registerBlock(BlockWarpwoodLeaves, "BlockWarpwoodLeaves");
 
-	public static Block BlockShadowOre;
-	public static Block BlockWarpwoodLog;
-	public static Block BlockWarpwoodLeaves;
-	public static Block BlockWarpwoodSapling;
-	public static Block BlockShadowmetal;
-	public static Block BlockWarpwoodPlanks;
+        // Warpwood Sapling
+        BlockWarpwoodSapling = new BlockWarpwoodSapling();
+        GameRegistry.registerBlock(BlockWarpwoodSapling, ItemBlockWarpwoodSapling.class, "BlockWarpwoodSapling");
+    }
+
+    public static Block BlockShadowOre;
+    public static Block BlockWarpwoodLog;
+    public static Block BlockWarpwoodLeaves;
+    public static Block BlockWarpwoodSapling;
+    public static Block BlockShadowmetal;
+    public static Block BlockWarpwoodPlanks;
 }

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
+
 import taintedmagic.common.handler.WandUpdateHandler;
 import taintedmagic.common.items.ItemMagicFunguar;
 import taintedmagic.common.items.ItemMaterial;
@@ -43,179 +44,200 @@ import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemRegistry
-{
-	public static void init ()
-	{
-		ItemMaterial = new ItemMaterial();
-		GameRegistry.registerItem(ItemMaterial, "ItemMaterial");
+public class ItemRegistry {
 
-		ItemVoidsentBlood = new ItemVoidsentBlood();
-		GameRegistry.registerItem(ItemVoidsentBlood, "ItemVoidsentBlood");
+    public static void init() {
+        ItemMaterial = new ItemMaterial();
+        GameRegistry.registerItem(ItemMaterial, "ItemMaterial");
 
-		ItemMagicFunguar = new ItemMagicFunguar(5, 1.0F, false);
-		GameRegistry.registerItem(ItemMagicFunguar, "ItemMagicFunguar");
+        ItemVoidsentBlood = new ItemVoidsentBlood();
+        GameRegistry.registerItem(ItemVoidsentBlood, "ItemVoidsentBlood");
 
-		// Armor
-		ItemWarpedGoggles = new ItemWarpedGoggles(LibToolMaterials.armorMatSpecial, 4, 0);
-		GameRegistry.registerItem(ItemWarpedGoggles, "ItemWarpedGoggles");
+        ItemMagicFunguar = new ItemMagicFunguar(5, 1.0F, false);
+        GameRegistry.registerItem(ItemMagicFunguar, "ItemMagicFunguar");
 
-		ItemVoidFortressHelmet = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 0).setUnlocalizedName("ItemVoidFortressHelmet");
-		GameRegistry.registerItem(ItemVoidFortressHelmet, "ItemVoidFortressHelmet");
+        // Armor
+        ItemWarpedGoggles = new ItemWarpedGoggles(LibToolMaterials.armorMatSpecial, 4, 0);
+        GameRegistry.registerItem(ItemWarpedGoggles, "ItemWarpedGoggles");
 
-		ItemVoidFortressChestplate = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 1).setUnlocalizedName("ItemVoidFortressChestplate");
-		GameRegistry.registerItem(ItemVoidFortressChestplate, "ItemVoidFortressChestplate");
+        ItemVoidFortressHelmet = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 0)
+                .setUnlocalizedName("ItemVoidFortressHelmet");
+        GameRegistry.registerItem(ItemVoidFortressHelmet, "ItemVoidFortressHelmet");
 
-		ItemVoidFortressLeggings = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 2).setUnlocalizedName("ItemVoidFortressLeggings");
-		GameRegistry.registerItem(ItemVoidFortressLeggings, "ItemVoidFortressLeggings");
+        ItemVoidFortressChestplate = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 1)
+                .setUnlocalizedName("ItemVoidFortressChestplate");
+        GameRegistry.registerItem(ItemVoidFortressChestplate, "ItemVoidFortressChestplate");
 
-		ItemVoidwalkerBoots = new ItemVoidwalkerBoots(LibToolMaterials.armorMatSpecial, 4, 3).setUnlocalizedName("ItemVoidwalkerBoots");
-		GameRegistry.registerItem(ItemVoidwalkerBoots, "ItemVoidwalkerBoots");
+        ItemVoidFortressLeggings = new ItemVoidFortressArmor(LibToolMaterials.armorMatVoidFortress, 4, 2)
+                .setUnlocalizedName("ItemVoidFortressLeggings");
+        GameRegistry.registerItem(ItemVoidFortressLeggings, "ItemVoidFortressLeggings");
 
-		ItemVoidwalkerSash = new ItemVoidwalkerSash();
-		GameRegistry.registerItem(ItemVoidwalkerSash, "ItemVoidwalkerSash");
+        ItemVoidwalkerBoots = new ItemVoidwalkerBoots(LibToolMaterials.armorMatSpecial, 4, 3)
+                .setUnlocalizedName("ItemVoidwalkerBoots");
+        GameRegistry.registerItem(ItemVoidwalkerBoots, "ItemVoidwalkerBoots");
 
-		ItemShadowFortressHelmet = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 0).setUnlocalizedName("ItemShadowFortressHelmet");
-		GameRegistry.registerItem(ItemShadowFortressHelmet, "ItemShadowFortressHelmet");
+        ItemVoidwalkerSash = new ItemVoidwalkerSash();
+        GameRegistry.registerItem(ItemVoidwalkerSash, "ItemVoidwalkerSash");
 
-		ItemShadowFortressChestplate = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 1).setUnlocalizedName("ItemShadowFortressChestplate");
-		GameRegistry.registerItem(ItemShadowFortressChestplate, "ItemShadowFortressChestplate");
+        ItemShadowFortressHelmet = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 0)
+                .setUnlocalizedName("ItemShadowFortressHelmet");
+        GameRegistry.registerItem(ItemShadowFortressHelmet, "ItemShadowFortressHelmet");
 
-		ItemShadowFortressLeggings = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 2).setUnlocalizedName("ItemShadowFortressLeggings");
-		GameRegistry.registerItem(ItemShadowFortressLeggings, "ItemShadowFortressLeggings");
+        ItemShadowFortressChestplate = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 1)
+                .setUnlocalizedName("ItemShadowFortressChestplate");
+        GameRegistry.registerItem(ItemShadowFortressChestplate, "ItemShadowFortressChestplate");
 
-		ItemVoidmetalGoggles = new ItemVoidmetalGoggles(ArmorMaterial.IRON, 4, 0);
-		GameRegistry.registerItem(ItemVoidmetalGoggles, "ItemVoidmetalGoggles");
+        ItemShadowFortressLeggings = new ItemShadowFortressArmor(LibToolMaterials.armorMatShadowFortress, 4, 2)
+                .setUnlocalizedName("ItemShadowFortressLeggings");
+        GameRegistry.registerItem(ItemShadowFortressLeggings, "ItemShadowFortressLeggings");
 
-		// Wands and Staves
-		ItemWandRod = new ItemWandRod();
-		GameRegistry.registerItem(ItemWandRod, "ItemWandRod");
+        ItemVoidmetalGoggles = new ItemVoidmetalGoggles(ArmorMaterial.IRON, 4, 0);
+        GameRegistry.registerItem(ItemVoidmetalGoggles, "ItemVoidmetalGoggles");
 
-		WAND_ROD_WARPWOOD = new WandRod("warpwood", 250, new ItemStack(ItemWandRod, 1, 0), 16, new WandUpdateHandler(), new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
-		WAND_ROD_WARPWOOD.setGlowing(true);
+        // Wands and Staves
+        ItemWandRod = new ItemWandRod();
+        GameRegistry.registerItem(ItemWandRod, "ItemWandRod");
 
-		STAFF_ROD_WARPWOOD = new StaffRod("warpwood", 500, new ItemStack(ItemWandRod, 1, 1), 20, new WandUpdateHandler(), new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
-		STAFF_ROD_WARPWOOD.setRunes(true);
-		STAFF_ROD_WARPWOOD.setGlowing(true);
+        WAND_ROD_WARPWOOD = new WandRod(
+                "warpwood",
+                250,
+                new ItemStack(ItemWandRod, 1, 0),
+                16,
+                new WandUpdateHandler(),
+                new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
+        WAND_ROD_WARPWOOD.setGlowing(true);
 
-		ItemWandCap = new ItemWandCap();
-		GameRegistry.registerItem(ItemWandCap, "ItemWandCap");
+        STAFF_ROD_WARPWOOD = new StaffRod(
+                "warpwood",
+                500,
+                new ItemStack(ItemWandRod, 1, 1),
+                20,
+                new WandUpdateHandler(),
+                new ResourceLocation("taintedmagic:textures/models/ModelWAND_ROD_WARPWOOD.png"));
+        STAFF_ROD_WARPWOOD.setRunes(true);
+        STAFF_ROD_WARPWOOD.setGlowing(true);
 
-		WAND_CAP_SHADOWMETAL = new WandCap("shadowmetal", 0.70F, new ItemStack(ItemWandCap, 1, 0), 12);
-		WAND_CAP_SHADOWMETAL.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOWMETAL.png"));
+        ItemWandCap = new ItemWandCap();
+        GameRegistry.registerItem(ItemWandCap, "ItemWandCap");
 
-		WAND_CAP_CLOTH = new WandCap("cloth", 0.95F, new ItemStack(ItemWandCap, 1, 1), 3);
-		WAND_CAP_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CLOTH.png"));
+        WAND_CAP_SHADOWMETAL = new WandCap("shadowmetal", 0.70F, new ItemStack(ItemWandCap, 1, 0), 12);
+        WAND_CAP_SHADOWMETAL
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOWMETAL.png"));
 
-		WAND_CAP_CRIMSON_CLOTH = new WandCap("crimsoncloth", 0.85F, new ItemStack(ItemWandCap, 1, 2), 5);
-		WAND_CAP_CRIMSON_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
+        WAND_CAP_CLOTH = new WandCap("cloth", 0.95F, new ItemStack(ItemWandCap, 1, 1), 3);
+        WAND_CAP_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CLOTH.png"));
 
-		WAND_CAP_SHADOW_CLOTH = new WandCap("shadowcloth", 0.90F, new ItemStack(ItemWandCap, 1, 3), 3);
-		WAND_CAP_SHADOW_CLOTH.setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
+        WAND_CAP_CRIMSON_CLOTH = new WandCap("crimsoncloth", 0.85F, new ItemStack(ItemWandCap, 1, 2), 5);
+        WAND_CAP_CRIMSON_CLOTH
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_CRIMSON_CLOTH.png"));
 
-		// Foci
-		ItemFocusTaint = new ItemFocusTaint();
-		GameRegistry.registerItem(ItemFocusTaint, "ItemFocusTaint");
+        WAND_CAP_SHADOW_CLOTH = new WandCap("shadowcloth", 0.90F, new ItemStack(ItemWandCap, 1, 3), 3);
+        WAND_CAP_SHADOW_CLOTH
+                .setTexture(new ResourceLocation("taintedmagic:textures/models/ModelWAND_CAP_SHADOW_CLOTH.png"));
 
-		ItemFocusEldritch = new ItemFocusEldritch();
-		GameRegistry.registerItem(ItemFocusEldritch, "ItemFocusEldritch");
+        // Foci
+        ItemFocusTaint = new ItemFocusTaint();
+        GameRegistry.registerItem(ItemFocusTaint, "ItemFocusTaint");
 
-		ItemFocusMeteorology = new ItemFocusMeteorology();
-		GameRegistry.registerItem(ItemFocusMeteorology, "ItemFocusMeteorology");
+        ItemFocusEldritch = new ItemFocusEldritch();
+        GameRegistry.registerItem(ItemFocusEldritch, "ItemFocusEldritch");
 
-		ItemFocusTime = new ItemFocusTime();
-		GameRegistry.registerItem(ItemFocusTime, "ItemFocusTime");
+        ItemFocusMeteorology = new ItemFocusMeteorology();
+        GameRegistry.registerItem(ItemFocusMeteorology, "ItemFocusMeteorology");
 
-		ItemFocusMageMace = new ItemFocusMageMace();
-		GameRegistry.registerItem(ItemFocusMageMace, "ItemFocusMageMace");
+        ItemFocusTime = new ItemFocusTime();
+        GameRegistry.registerItem(ItemFocusTime, "ItemFocusTime");
 
-		ItemFocusTaintedBlast = new ItemFocusTaintedBlast();
-		GameRegistry.registerItem(ItemFocusTaintedBlast, "ItemFocusTaintedBlast");
+        ItemFocusMageMace = new ItemFocusMageMace();
+        GameRegistry.registerItem(ItemFocusMageMace, "ItemFocusMageMace");
 
-		ItemFocusVisShard = new ItemFocusVisShard();
-		GameRegistry.registerItem(ItemFocusVisShard, "ItemFocusVisShard");
+        ItemFocusTaintedBlast = new ItemFocusTaintedBlast();
+        GameRegistry.registerItem(ItemFocusTaintedBlast, "ItemFocusTaintedBlast");
 
-		// Tools
-		ItemThaumicDisassembler = new ItemThaumicDisassembler();
-		GameRegistry.registerItem(ItemThaumicDisassembler, "ItemThaumicDisassembler");
+        ItemFocusVisShard = new ItemFocusVisShard();
+        GameRegistry.registerItem(ItemFocusVisShard, "ItemFocusVisShard");
 
-		ItemCrystalDagger = new ItemCrystalDagger(LibToolMaterials.toolMatCrystal);
-		GameRegistry.registerItem(ItemCrystalDagger, "ItemCrystalDagger");
+        // Tools
+        ItemThaumicDisassembler = new ItemThaumicDisassembler();
+        GameRegistry.registerItem(ItemThaumicDisassembler, "ItemThaumicDisassembler");
 
-		ItemShadowmetalHoe = new ItemShadowmetalHoe(LibToolMaterials.toolMatShadow);
-		GameRegistry.registerItem(ItemShadowmetalHoe, "ItemShadowmetalHoe");
+        ItemCrystalDagger = new ItemCrystalDagger(LibToolMaterials.toolMatCrystal);
+        GameRegistry.registerItem(ItemCrystalDagger, "ItemCrystalDagger");
 
-		ItemShadowmetalPick = new ItemShadowmetalPick(LibToolMaterials.toolMatShadow);
-		GameRegistry.registerItem(ItemShadowmetalPick, "ItemShadowmetalPick");
+        ItemShadowmetalHoe = new ItemShadowmetalHoe(LibToolMaterials.toolMatShadow);
+        GameRegistry.registerItem(ItemShadowmetalHoe, "ItemShadowmetalHoe");
 
-		ItemShadowmetalAxe = new ItemShadowmetalAxe(LibToolMaterials.toolMatShadow);
-		GameRegistry.registerItem(ItemShadowmetalAxe, "ItemShadowmetalAxe");
+        ItemShadowmetalPick = new ItemShadowmetalPick(LibToolMaterials.toolMatShadow);
+        GameRegistry.registerItem(ItemShadowmetalPick, "ItemShadowmetalPick");
 
-		ItemShadowmetalSpade = new ItemShadowmetalSpade(LibToolMaterials.toolMatShadow);
-		GameRegistry.registerItem(ItemShadowmetalSpade, "ItemShadowmetalSpade");
+        ItemShadowmetalAxe = new ItemShadowmetalAxe(LibToolMaterials.toolMatShadow);
+        GameRegistry.registerItem(ItemShadowmetalAxe, "ItemShadowmetalAxe");
 
-		ItemShadowmetalSword = new ItemShadowmetalSword(LibToolMaterials.toolMatShadow);
-		GameRegistry.registerItem(ItemShadowmetalSword, "ItemShadowmetalSword");
+        ItemShadowmetalSpade = new ItemShadowmetalSpade(LibToolMaterials.toolMatShadow);
+        GameRegistry.registerItem(ItemShadowmetalSpade, "ItemShadowmetalSpade");
 
-		ItemPrimordialEdge = new ItemPrimordialEdge(LibToolMaterials.toolMatPrimal);
-		GameRegistry.registerItem(ItemPrimordialEdge, "ItemPrimordialEdge");
+        ItemShadowmetalSword = new ItemShadowmetalSword(LibToolMaterials.toolMatShadow);
+        GameRegistry.registerItem(ItemShadowmetalSword, "ItemShadowmetalSword");
 
-		ItemKatana = new ItemKatana();
-		GameRegistry.registerItem(ItemKatana, "ItemKatana");
-	}
+        ItemPrimordialEdge = new ItemPrimordialEdge(LibToolMaterials.toolMatPrimal);
+        GameRegistry.registerItem(ItemPrimordialEdge, "ItemPrimordialEdge");
 
-	public static Item ItemMagicFunguar;
-	public static Item ItemMaterial;
-	public static Item ItemVoidsentBlood;
+        ItemKatana = new ItemKatana();
+        GameRegistry.registerItem(ItemKatana, "ItemKatana");
+    }
 
-	// Wand
-	public static Item ItemWandRod;
+    public static Item ItemMagicFunguar;
+    public static Item ItemMaterial;
+    public static Item ItemVoidsentBlood;
 
-	public static WandRod WAND_ROD_WARPWOOD;
-	public static StaffRod STAFF_ROD_WARPWOOD;
+    // Wand
+    public static Item ItemWandRod;
 
-	public static Item ItemWandCap;
+    public static WandRod WAND_ROD_WARPWOOD;
+    public static StaffRod STAFF_ROD_WARPWOOD;
 
-	public static WandCap WAND_CAP_SHADOWMETAL;
-	public static WandCap WAND_CAP_CLOTH;
-	public static WandCap WAND_CAP_CRIMSON_CLOTH;
-	public static WandCap WAND_CAP_SHADOW_CLOTH;
+    public static Item ItemWandCap;
 
-	// Foci
-	public static Item ItemFocusTaint;
-	public static Item ItemFocusEldritch;
-	public static Item ItemFocusMeteorology;
-	public static Item ItemFocusTime;
-	public static Item ItemFocusMageMace;
-	public static Item ItemFocusTaintedBlast;
-	public static Item ItemFocusVisShard;
+    public static WandCap WAND_CAP_SHADOWMETAL;
+    public static WandCap WAND_CAP_CLOTH;
+    public static WandCap WAND_CAP_CRIMSON_CLOTH;
+    public static WandCap WAND_CAP_SHADOW_CLOTH;
 
-	// Armor and Baubles
-	public static Item ItemWarpedGoggles;
-	public static Item ItemVoidmetalGoggles;
+    // Foci
+    public static Item ItemFocusTaint;
+    public static Item ItemFocusEldritch;
+    public static Item ItemFocusMeteorology;
+    public static Item ItemFocusTime;
+    public static Item ItemFocusMageMace;
+    public static Item ItemFocusTaintedBlast;
+    public static Item ItemFocusVisShard;
 
-	public static Item ItemVoidwalkerBoots;
-	public static Item ItemVoidwalkerSash;
+    // Armor and Baubles
+    public static Item ItemWarpedGoggles;
+    public static Item ItemVoidmetalGoggles;
 
-	public static Item ItemVoidFortressHelmet;
-	public static Item ItemVoidFortressChestplate;
-	public static Item ItemVoidFortressLeggings;
+    public static Item ItemVoidwalkerBoots;
+    public static Item ItemVoidwalkerSash;
 
-	public static Item ItemShadowFortressHelmet;
-	public static Item ItemShadowFortressChestplate;
-	public static Item ItemShadowFortressLeggings;
+    public static Item ItemVoidFortressHelmet;
+    public static Item ItemVoidFortressChestplate;
+    public static Item ItemVoidFortressLeggings;
 
-	// Tools
-	public static Item ItemThaumicDisassembler;
-	public static Item ItemCrystalDagger;
+    public static Item ItemShadowFortressHelmet;
+    public static Item ItemShadowFortressChestplate;
+    public static Item ItemShadowFortressLeggings;
 
-	public static ItemHoe ItemShadowmetalHoe;
-	public static ItemPickaxe ItemShadowmetalPick;
-	public static ItemSpade ItemShadowmetalSpade;
-	public static ItemAxe ItemShadowmetalAxe;
-	public static ItemSword ItemShadowmetalSword;
+    // Tools
+    public static Item ItemThaumicDisassembler;
+    public static Item ItemCrystalDagger;
 
-	public static ItemSword ItemPrimordialEdge;
+    public static ItemHoe ItemShadowmetalHoe;
+    public static ItemPickaxe ItemShadowmetalPick;
+    public static ItemSpade ItemShadowmetalSpade;
+    public static ItemAxe ItemShadowmetalAxe;
+    public static ItemSword ItemShadowmetalSword;
 
-	public static Item ItemKatana;
+    public static ItemSword ItemPrimordialEdge;
+
+    public static Item ItemKatana;
 }
