@@ -49,8 +49,6 @@ public class WorldGenWarpwoodTree extends WorldGenAbstractTree {
     /** Contains a list of a points at which to generate groups of leaves. */
     int[][] leafNodes;
 
-    /** private static final String __OBFID = "CL_00000400"; */
-
     public WorldGenWarpwoodTree(boolean b, Block trunk, Block leaves) {
         super(b);
         this.trunk = trunk;
