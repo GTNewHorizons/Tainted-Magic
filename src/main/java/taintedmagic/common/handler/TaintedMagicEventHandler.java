@@ -1,5 +1,7 @@
 package taintedmagic.common.handler;
 
+import static taintedmagic.common.helper.TaintedMagicHelper.getWandDamageWithPotency;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -9,7 +11,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,11 +27,8 @@ import taintedmagic.api.IBloodlust;
 import taintedmagic.common.items.wand.foci.ItemFocusMageMace;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.ThaumcraftApiHelper;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.api.wands.StaffRod;
-import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.config.Config;
 import thaumcraft.common.config.ConfigItems;
@@ -49,128 +47,115 @@ public class TaintedMagicEventHandler {
     @SubscribeEvent
     public void livingTick(LivingEvent.LivingUpdateEvent event) {
         if (event.entity instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer) event.entity;
-            updateAttackDamage(p);
+            EntityPlayer player = (EntityPlayer) event.entity;
 
-            for (int i = 0; i < p.inventory.getSizeInventory(); i++) {
-                if (p.inventory.getStackInSlot(i) != null && p.inventory.getStackInSlot(i).stackTagCompound != null
-                        && p.inventory.getStackInSlot(i).stackTagCompound.getBoolean("voidtouched")) {
-                    ItemStack s = p.inventory.getStackInSlot(i);
-                    if (!p.worldObj.isRemote && s.isItemDamaged() && p.ticksExisted % 20 == 0)
-                        s.damageItem(-1, (EntityLivingBase) p);
+            if ((player.ticksExisted + 6) % 20 == 0 && !player.worldObj.isRemote) {
+                updateAttackDamage(player);
+
+                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                    if (player.inventory.getStackInSlot(i) != null
+                            && player.inventory.getStackInSlot(i).stackTagCompound != null
+                            && player.inventory.getStackInSlot(i).stackTagCompound.getBoolean("voidtouched")) {
+                        ItemStack stack = player.inventory.getStackInSlot(i);
+                        if (stack.isItemDamaged()) stack.damageItem(-1, (EntityLivingBase) player);
+                    }
                 }
             }
         }
     }
 
     /*
-     * Used to upate the attack damage for the Mage's Mace focus
+     * Used to update the attack damage for the Mage's Mace focus
      */
-    public void updateAttackDamage(EntityPlayer p) {
-        if (!p.worldObj.isRemote) {
-            IInventory inv = p.inventory;
+    private void updateAttackDamage(EntityPlayer player) {
+        ItemStack stack = player.getHeldItem();
+        if (stack != null && stack.getItem() instanceof ItemWandCasting) {
+            final ItemWandCasting wand = (ItemWandCasting) stack.getItem();
+            boolean isMageMaceActive;
+            int countOfPotency;
+            int newDamage;
 
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                if (inv.getStackInSlot(i) != null && inv.getStackInSlot(i).getItem() instanceof ItemWandCasting) {
-                    ItemStack s = inv.getStackInSlot(i);
-                    ItemWandCasting wand = (ItemWandCasting) inv.getStackInSlot(i).getItem();
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey("MageMace")) {
+                isMageMaceActive = stack.getTagCompound().getCompoundTag("MageMace").getBoolean("isMageMaceActive");
+                countOfPotency = stack.getTagCompound().getCompoundTag("MageMace").getInteger("potency");
+            } else {
+                isMageMaceActive = false;
+                countOfPotency = 0;
+            }
 
-                    if (wand.getFocus(s) != null && wand.getFocus(s) == ItemRegistry.ItemFocusMageMace
-                            && wand.getRod(s) instanceof WandRod) {
-                        NBTTagList tags = new NBTTagList();
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setString(
-                                "AttributeName",
-                                SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
+            // set new damage
+            if (wand.getFocus(stack) == ItemRegistry.ItemFocusMageMace
+                    && (!isMageMaceActive || countOfPotency != wand.getFocusPotency(stack))) {
+                if (wand.getRod(stack) instanceof StaffRod)
+                    newDamage = (int) (getWandDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage)
+                            * ConfigHandler.magesMaceStaffMultiple);
+                else newDamage = getWandDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage);
 
-                        UUID u = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-                        AttributeModifier am = new AttributeModifier(
-                                u,
-                                "Weapon modifier",
-                                15.0D + wand.getFocusPotency(s),
-                                0);
-
-                        tag.setString("Name", am.getName());
-                        tag.setDouble("Amount", am.getAmount());
-                        tag.setInteger("Operation", am.getOperation());
-                        tag.setLong("UUIDMost", am.getID().getMostSignificantBits());
-                        tag.setLong("UUIDLeast", am.getID().getLeastSignificantBits());
-
-                        tags.appendTag(tag);
-                        s.stackTagCompound.setTag("AttributeModifiers", tags);
-                    } else if (wand.getRod(s) instanceof WandRod) {
-                        if (!s.hasTagCompound()) {
-                            s.setTagCompound(new NBTTagCompound());
-                        }
-                        s.stackTagCompound.removeTag("AttributeModifiers");
-                    }
-                    if (wand.getFocus(s) != null && wand.getFocus(s) == ItemRegistry.ItemFocusMageMace
-                            && wand.getRod(s) instanceof StaffRod) {
-                        NBTTagList tags = new NBTTagList();
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setString(
-                                "AttributeName",
-                                SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-
-                        UUID u = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-                        AttributeModifier am = new AttributeModifier(
-                                u,
-                                "Weapon modifier",
-                                21.0D + wand.getFocusPotency(s),
-                                0);
-
-                        tag.setString("Name", am.getName());
-                        tag.setDouble("Amount", am.getAmount());
-                        tag.setInteger("Operation", am.getOperation());
-                        tag.setLong("UUIDMost", am.getID().getMostSignificantBits());
-                        tag.setLong("UUIDLeast", am.getID().getLeastSignificantBits());
-
-                        tags.appendTag(tag);
-                        s.stackTagCompound.setTag("AttributeModifiers", tags);
-                    } else if (wand.getRod(s) instanceof StaffRod) {
-                        NBTTagList tags = new NBTTagList();
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setString(
-                                "AttributeName",
-                                SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-
-                        UUID u = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-                        AttributeModifier am = new AttributeModifier(u, "Weapon modifier", 6.0D, 0);
-
-                        tag.setString("Name", am.getName());
-                        tag.setDouble("Amount", am.getAmount());
-                        tag.setInteger("Operation", am.getOperation());
-                        tag.setLong("UUIDMost", am.getID().getMostSignificantBits());
-                        tag.setLong("UUIDLeast", am.getID().getLeastSignificantBits());
-
-                        tags.appendTag(tag);
-                        s.stackTagCompound.setTag("AttributeModifiers", tags);
-                    }
-                }
+                setDamage(stack, newDamage, wand.getFocusPotency(stack));
+                stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", true);
+                stack.stackTagCompound.getCompoundTag("MageMace").setInteger("potency", wand.getFocusPotency(stack));
+            }
+            // set base damage
+            else if (isMageMaceActive && wand.getFocus(stack) != ItemRegistry.ItemFocusMageMace) {
+                if (wand.getRod(stack) instanceof StaffRod) resetDamage(stack, 6);
+                else resetDamage(stack, 0);
             }
         }
+    }
+
+    private void resetDamage(ItemStack stack, int damage) {
+        setDamage(stack, damage, 0);
+        stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", false);
+        stack.stackTagCompound.getCompoundTag("MageMace").setInteger("potency", 0);
+    }
+
+    private void setDamage(ItemStack stack, int newDamage, int potency) {
+
+        if (stack.hasTagCompound() && !stack.stackTagCompound.hasKey("MageMace")) {
+            NBTTagCompound tagMageMace = new NBTTagCompound();
+            tagMageMace.setBoolean("isMageMaceActive", true);
+            tagMageMace.setInteger("countOfPotency", potency);
+            stack.stackTagCompound.setTag("MageMace", tagMageMace);
+        } else stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", true);
+
+        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagList tags = new NBTTagList();
+        tag.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
+        UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+        AttributeModifier modifier = new AttributeModifier(uuid, "Weapon modifier", newDamage, 0);
+
+        tag.setString("Name", modifier.getName());
+        tag.setDouble("Amount", modifier.getAmount());
+        tag.setInteger("Operation", modifier.getOperation());
+        tag.setLong("UUIDMost", modifier.getID().getMostSignificantBits());
+        tag.setLong("UUIDLeast", modifier.getID().getLeastSignificantBits());
+
+        tags.appendTag(tag);
+        stack.stackTagCompound.setTag("AttributeModifiers", tags);
     }
 
     @SubscribeEvent
     public void entityAttacked(LivingAttackEvent event) {
         if (event.source.getEntity() instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer) event.source.getEntity();
-            if (p.getHeldItem() != null && p.getHeldItem().getItem() instanceof ItemWandCasting) {
-                ItemStack s = p.getHeldItem();
-                ItemWandCasting wand = (ItemWandCasting) s.getItem();
+            EntityPlayer player = (EntityPlayer) event.source.getEntity();
+            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemWandCasting) {
+                final ItemStack stack = player.getHeldItem();
+                final ItemWandCasting wand = (ItemWandCasting) stack.getItem();
+                final ItemStack cap = wand.getFocusItem(stack);
 
-                if (wand.getFocus(s) != null && wand.getFocus(s) instanceof ItemFocusMageMace) {
-                    final AspectList aspects = new AspectList().add(Aspect.EARTH, 20).add(Aspect.ENTROPY, 20)
-                            .add(Aspect.ORDER, 20);
-                    if (wand.consumeAllVis(s, p, aspects, true, false)) {
-                        wand.consumeAllVis(s, p, aspects, true, false);
-                    } else {
+                if (wand.getFocus(stack) instanceof ItemFocusMageMace) {
+                    final ItemFocusMageMace itemFocusMageMace = (ItemFocusMageMace) wand.getFocus(stack);
+                    final boolean isEnoughVis = wand
+                            .consumeAllVis(stack, player, itemFocusMageMace.getVisCost(cap), true, false);
+
+                    if (!isEnoughVis) {
                         event.setCanceled(true);
                     }
                 }
             }
         }
     }
+    // End
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {

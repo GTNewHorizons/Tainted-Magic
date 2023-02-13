@@ -11,6 +11,8 @@ public class ConfigHandler {
     public static boolean useUpdateHandler = true;
     public static boolean researchTags = true;
     public static boolean useCustomResearchTabBackground = false;
+    public static int magesMaceBaseDamage;
+    public static float magesMaceStaffMultiple;
 
     public static void init() {
         TaintedMagic.log.info("Loading config");
@@ -29,6 +31,20 @@ public class ConfigHandler {
                 "research",
                 false,
                 "Setting this to true will enable the old custom tab background");
+        magesMaceBaseDamage = config.getInt(
+                "mages_mace_base_damage",
+                "foci",
+                30,
+                1,
+                300,
+                "Set damage for Mage's Mace foci. Staff get x2 damage");
+        magesMaceStaffMultiple = config.getFloat(
+                "mages_mace_staff_multiple",
+                "foci",
+                1.5f,
+                1,
+                5,
+                "Set damage multiplier for Staff with Mage's Mace");
 
         config.save();
     }

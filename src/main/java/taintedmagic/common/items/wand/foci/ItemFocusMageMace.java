@@ -1,5 +1,7 @@
 package taintedmagic.common.items.wand.foci;
 
+import static taintedmagic.common.helper.TaintedMagicHelper.getFocusDamageWithPotency;
+
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,6 +15,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import taintedmagic.common.TaintedMagic;
+import taintedmagic.common.handler.ConfigHandler;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -26,17 +29,15 @@ public class ItemFocusMageMace extends ItemFocusBasic {
     public IIcon depthIcon = null;
     public IIcon ornIcon = null;
 
-    public int dmg;
-
     public static FocusUpgradeType bloodlust = new FocusUpgradeType(
             58,
-            new ResourceLocation("taintedmagic", "textures/misc/IconBloodlust.png"),
+            new ResourceLocation("taintedmagic", "textures/foci/IconBloodlust.png"),
             "focus.upgrade.bloodlust.name",
             "focus.upgrade.bloodlust.text",
             new AspectList().add(Aspect.WEAPON, 1).add(Aspect.HEAL, 1));
-    public static final AspectList costBase = new AspectList().add(Aspect.ENTROPY, 50);
-    public static final AspectList costBloodlust = new AspectList().add(Aspect.ENTROPY, 50).add(Aspect.ORDER, 20)
-            .add(Aspect.FIRE, 50);
+    public final AspectList mageMaceCostBase = new AspectList().add(Aspect.EARTH, 120).add(Aspect.ENTROPY, 120)
+            .add(Aspect.ORDER, 80);
+    public final AspectList mageMAceCostBloodlust = mageMaceCostBase.copy().add(Aspect.FIRE, 80);
 
     public ItemFocusMageMace() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
@@ -66,8 +67,8 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         return 3289650;
     }
 
-    public AspectList getVisCost(ItemStack s) {
-        return this.isUpgradedWith(s, bloodlust) ? this.costBloodlust : this.costBase;
+    public AspectList getVisCost(ItemStack stack) {
+        return this.isUpgradedWith(stack, bloodlust) ? mageMAceCostBloodlust : mageMaceCostBase;
     }
 
     public int getActivationCooldown(ItemStack s) {
@@ -87,33 +88,33 @@ public class ItemFocusMageMace extends ItemFocusBasic {
     }
 
     @Override
-    public void addInformation(ItemStack s, EntityPlayer p, List l, boolean b) {
-        super.addInformation(s, p, l, b);
-        l.add(" ");
-        l.add(
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b) {
+        super.addInformation(stack, player, list, b);
+        list.add("");
+        list.add(
                 EnumChatFormatting.BLUE + "+"
-                        + new String(
-                                this.isUpgradedWith(s, FocusUpgradeType.potency)
-                                        ? Integer.toString(15 + this.getUpgradeLevel(s, FocusUpgradeType.potency))
-                                        : "15")
+                        + getFocusDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage)
                         + " "
                         + StatCollector.translateToLocal("text.attackdamageequipped"));
+        list.add(
+                EnumChatFormatting.BLUE
+                        + String.format("Staff gives x%.1f Damage", ConfigHandler.magesMaceStaffMultiple));
+        list.add("");
     }
 
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int rank) {
         switch (rank) {
             case 1:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 2:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 3:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 4:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 5:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, this.bloodlust };
+                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, bloodlust };
+            default:
+                return null;
         }
-        return null;
+
     }
 
     public boolean canApplyUpgrade(ItemStack s, EntityPlayer p, FocusUpgradeType t, int rank) {
