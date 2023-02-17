@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.wands.FocusUpgradeType;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.items.wands.WandManager;
@@ -23,8 +24,8 @@ public class ItemFocusTime extends ItemFocusBasic {
 
     IIcon depthIcon = null;
 
-    private static final AspectList costBase = new AspectList().add(Aspect.AIR, 1000).add(Aspect.WATER, 1000)
-            .add(Aspect.FIRE, 1000).add(Aspect.EARTH, 1000).add(Aspect.ORDER, 1000).add(Aspect.ENTROPY, 1000);
+    private static final AspectList costBase = new AspectList().add(Aspect.AIR, 8000).add(Aspect.WATER, 8000)
+            .add(Aspect.FIRE, 8000).add(Aspect.EARTH, 8000).add(Aspect.ORDER, 8000).add(Aspect.ENTROPY, 8000);
 
     public ItemFocusTime() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
@@ -51,8 +52,7 @@ public class ItemFocusTime extends ItemFocusBasic {
     }
 
     public AspectList getVisCost(ItemStack s) {
-        return new AspectList().add(Aspect.AIR, 1000).add(Aspect.WATER, 1000).add(Aspect.FIRE, 1000)
-                .add(Aspect.EARTH, 1000).add(Aspect.ORDER, 1000).add(Aspect.ENTROPY, 1000);
+        return costBase;
     }
 
     public int getActivationCooldown(ItemStack s) {
@@ -87,5 +87,18 @@ public class ItemFocusTime extends ItemFocusBasic {
     @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack s) {
         return TaintedMagic.rarityCreation;
+    }
+
+    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int r) {
+        switch (r) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new FocusUpgradeType[] { FocusUpgradeType.frugal };
+            default:
+                return null;
+        }
     }
 }

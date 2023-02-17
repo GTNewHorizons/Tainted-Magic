@@ -1,7 +1,5 @@
 package taintedmagic.common.handler;
 
-import static taintedmagic.common.helper.TaintedMagicHelper.getWandDamageWithPotency;
-
 import java.util.Random;
 import java.util.UUID;
 
@@ -24,9 +22,11 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import taintedmagic.api.IBloodlust;
+import taintedmagic.common.helper.TaintedMagicHelper;
 import taintedmagic.common.items.wand.foci.ItemFocusMageMace;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.wands.FocusUpgradeType;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.common.Thaumcraft;
@@ -73,7 +73,6 @@ public class TaintedMagicEventHandler {
             final ItemWandCasting wand = (ItemWandCasting) stack.getItem();
             boolean isMageMaceActive;
             int countOfPotency;
-            int newDamage;
 
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey("MageMace")) {
                 isMageMaceActive = stack.getTagCompound().getCompoundTag("MageMace").getBoolean("isMageMaceActive");
@@ -86,10 +85,10 @@ public class TaintedMagicEventHandler {
             // set new damage
             if (wand.getFocus(stack) == ItemRegistry.ItemFocusMageMace
                     && (!isMageMaceActive || countOfPotency != wand.getFocusPotency(stack))) {
-                if (wand.getRod(stack) instanceof StaffRod)
-                    newDamage = (int) (getWandDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage)
-                            * ConfigHandler.magesMaceStaffMultiple);
-                else newDamage = getWandDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage);
+                int newDamage = (int) TaintedMagicHelper.getFocusDamageWithPotency(
+                        stack,
+                        ConfigHandler.magesMaceBaseDamage,
+                        ConfigHandler.magesMaceStaffMultiple);
 
                 setDamage(stack, newDamage, wand.getFocusPotency(stack));
                 stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", true);
@@ -160,6 +159,13 @@ public class TaintedMagicEventHandler {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (UpdateHandler.show) event.player.addChatMessage(new ChatComponentText(UpdateHandler.updateStatus));
+    }
+
+    public static int getFocusDamageWithPotency(ItemStack stack, int damage) {
+        if (stack != null && stack.getItem() instanceof ItemFocusMageMace) {
+            final ItemFocusMageMace cap = (ItemFocusMageMace) stack.getItem();
+            return (int) ((damage + damage * cap.getUpgradeLevel(stack, FocusUpgradeType.potency) * 0.2) + 0.5);
+        } else return damage;
     }
 
     @SubscribeEvent

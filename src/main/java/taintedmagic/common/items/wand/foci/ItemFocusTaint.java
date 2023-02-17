@@ -1,5 +1,6 @@
 package taintedmagic.common.items.wand.foci;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,11 +10,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityTaintBubble;
+import taintedmagic.common.handler.ConfigHandler;
+import taintedmagic.common.helper.TaintedMagicHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.FocusUpgradeType;
@@ -40,9 +42,10 @@ public class ItemFocusTaint extends ItemFocusBasic {
             new AspectList().add(Aspect.TAINT, 1).add(Aspect.POISON, 1));
     IIcon depthIcon = null;
 
-    private static final AspectList costBase = new AspectList().add(Aspect.EARTH, 10).add(Aspect.WATER, 10);
-    private static final AspectList costTainturgist = new AspectList().add(Aspect.EARTH, 10).add(Aspect.WATER, 10)
-            .add(Aspect.ORDER, 10);
+    private final AspectList costBase = new AspectList().add(Aspect.AIR, 120).add(Aspect.WATER, 120);
+    private final AspectList costTainturgy = new AspectList().add(Aspect.ORDER, 80);
+    private final AspectList costCorrosive = new AspectList().add(Aspect.ENTROPY, 80).add(Aspect.FIRE, 60);
+    private final AspectList costEnlarge = new AspectList().add(Aspect.AIR, 80).add(Aspect.WATER, 80);
 
     public ItemFocusTaint() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
@@ -55,72 +58,84 @@ public class ItemFocusTaint extends ItemFocusBasic {
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusTaint_depth");
     }
 
-    public IIcon getFocusDepthLayerIcon(ItemStack s) {
+    public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
-    public String getSortingHelper(ItemStack s) {
-        return "TAINT" + super.getSortingHelper(s);
+    public String getSortingHelper(ItemStack stack) {
+        return "TAINT" + super.getSortingHelper(stack);
     }
 
-    public int getFocusColor(ItemStack s) {
+    public int getFocusColor(ItemStack stack) {
         return 8073200;
     }
 
-    public AspectList getVisCost(ItemStack s) {
-        return isUpgradedWith(s, tainturgy) ? costTainturgist : costBase;
+    public AspectList getVisCost(ItemStack stack) {
+        AspectList list = costBase.copy();
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, tainturgy)) {
+            list.add(costTainturgy);
+        }
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, corrosive)) {
+            list.add(costCorrosive);
+        }
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, FocusUpgradeType.enlarge)) {
+            list.add(costEnlarge);
+        }
+
+        return list;
     }
 
-    public int getActivationCooldown(ItemStack s) {
+    public int getActivationCooldown(ItemStack stack) {
         return -1;
     }
 
-    public boolean isVisCostPerTick(ItemStack s) {
+    public boolean isVisCostPerTick(ItemStack stack) {
         return true;
     }
 
-    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack s) {
+    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.CHARGE;
     }
 
-    public ItemStack onFocusRightClick(ItemStack s, World w, EntityPlayer p, MovingObjectPosition mop) {
-        ItemWandCasting wand = (ItemWandCasting) s.getItem();
-        p.setItemInUse(s, 2147483647);
-        WandManager.setCooldown(p, -1);
-        return s;
+    public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
+        player.setItemInUse(stack, 2147483647);
+        WandManager.setCooldown(player, -1);
+        return stack;
     }
 
-    public void onUsingFocusTick(ItemStack s, EntityPlayer p, int count) {
-        ItemWandCasting wand = (ItemWandCasting) s.getItem();
-        if (!wand.consumeAllVis(s, p, getVisCost(s), false, false)) {
-            p.stopUsingItem();
+    public void onUsingFocusTick(ItemStack stack, EntityPlayer player, int count) {
+        ItemWandCasting wand = (ItemWandCasting) stack.getItem();
+        if (!wand.consumeAllVis(stack, player, getVisCost(stack), false, false)) {
+            player.stopUsingItem();
             return;
         }
-        int range = 8;
-        Vec3 vec3d = p.getLook(range);
-        if (!p.worldObj.isRemote && p.ticksExisted % 5 == 0)
-            p.worldObj.playSoundAtEntity(p, "thaumcraft:bubble", 0.33F, 5.0F * (float) Math.random());
+        if (!player.worldObj.isRemote && (player.ticksExisted + 6) % 5 == 0) {
+            player.worldObj.playSoundAtEntity(player, "thaumcraft:bubble", 0.33F, 5.0F * (float) Math.random());
+            wand.consumeAllVis(stack, player, getVisCost(stack), true, false);
+        }
 
-        int potency = wand.getFocusPotency(s);
-        if ((!p.worldObj.isRemote) && (wand.consumeAllVis(s, p, getVisCost(s), true, false))) {
-            float scatter = isUpgradedWith(wand.getFocusItem(s), FocusUpgradeType.enlarge) ? 15.0F : 8.0F;
-            for (int a = 0; a < 2 + wand.getFocusPotency(s); a++) {
+        if (!player.worldObj.isRemote) {
+            float scatter = isUpgradedWith(wand.getFocusItem(stack), FocusUpgradeType.enlarge) ? 15.0F : 8.0F;
+            for (int a = 0; a < 2 + wand.getFocusPotency(stack); a++) {
                 EntityTaintBubble orb = new EntityTaintBubble(
-                        p.worldObj,
-                        p,
+                        player.worldObj,
+                        player,
                         scatter,
-                        isUpgradedWith(wand.getFocusItem(s), this.corrosive));
+                        isUpgradedWith(wand.getFocusItem(stack), this.corrosive));
                 orb.posX += orb.motionX;
                 orb.posY += orb.motionY;
                 orb.posZ += orb.motionZ;
-                orb.damage = 5F + potency;
-                p.worldObj.spawnEntityInWorld(orb);
-                if (!isUpgradedWith(wand.getFocusItem(s), tainturgy)) {
+                orb.damage = TaintedMagicHelper.getFocusDamageWithPotency(
+                        stack,
+                        ConfigHandler.taintStormBaseDamage,
+                        ConfigHandler.taintStormStaffMultiple);
+                player.worldObj.spawnEntityInWorld(orb);
+                if (!TaintedMagicHelper.hasFocusUpgrade(stack, tainturgy)) {
                     Random rand = new Random();
                     int randomInt = rand.nextInt(150);
                     if (randomInt == 9) {
                         try {
-                            p.addPotionEffect(new PotionEffect(Config.potionVisExhaustID, 1000, 2));
+                            player.addPotionEffect(new PotionEffect(Config.potionVisExhaustID, 1000, 2));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -130,10 +145,22 @@ public class ItemFocusTaint extends ItemFocusBasic {
         }
     }
 
-    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int rank) {
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+        super.addInformation(stack, player, list, par4);
+        if (ConfigHandler.taintStormStaffMultiple != 1) {
+            list = TaintedMagicHelper.addTooltipDamageAndStaffMultiplier(
+                    list,
+                    ConfigHandler.taintStormBaseDamage,
+                    stack,
+                    ConfigHandler.taintStormStaffMultiple);
+        }
+    }
+
+    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 2:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 3:
@@ -143,7 +170,8 @@ public class ItemFocusTaint extends ItemFocusBasic {
                         FocusUpgradeType.enlarge };
             case 5:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, corrosive };
+            default:
+                return null;
         }
-        return null;
     }
 }

@@ -63,7 +63,7 @@ public class EntityHomingShard extends EntityThrowable implements IEntityAdditio
     }
 
     public void setStrength(int str) {
-        this.dataWatcher.updateObject(17, Byte.valueOf((byte) str));
+        this.dataWatcher.updateObject(17, Byte.valueOf((byte) (str / 5)));
     }
 
     public int getStrength() {
@@ -94,9 +94,8 @@ public class EntityHomingShard extends EntityThrowable implements IEntityAdditio
     protected void onImpact(MovingObjectPosition mop) {
         if (!this.worldObj.isRemote && mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY
                 && (getThrower() == null || (getThrower() != null && mop.entityHit != getThrower()))) {
-            mop.entityHit.attackEntityFrom(
-                    DamageSource.causeIndirectMagicDamage(this, getThrower()),
-                    2.0F + getStrength() * 0.5F);
+            mop.entityHit
+                    .attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, getThrower()), getStrength() * 5F);
             this.worldObj.playSoundAtEntity(
                     this,
                     "thaumcraft:zap",

@@ -16,6 +16,7 @@ text.eldritchsapping=Eldritch Sapping
 text.bloodlust=Bloodlust
 
 #=========FOCAL UPGRADES==============
+focus.upgrade.staff_tooltip.tip=Staff gives x%.1f Damage
 
 focus.upgrade.tainturgy.name=Tainturgy
 focus.upgrade.tainturgy.text=This upgrade will stop the bubbles from infecting you with Flux Flu.

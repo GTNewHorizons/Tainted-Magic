@@ -1,7 +1,5 @@
 package taintedmagic.common.items.wand.foci;
 
-import static taintedmagic.common.helper.TaintedMagicHelper.getFocusDamageWithPotency;
-
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,6 +14,7 @@ import net.minecraft.world.World;
 
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.handler.ConfigHandler;
+import taintedmagic.common.helper.TaintedMagicHelper;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -51,19 +50,19 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         this.ornIcon = ir.registerIcon("taintedmagic:ItemFocusMageMace_orn");
     }
 
-    public IIcon getFocusDepthLayerIcon(ItemStack s) {
+    public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
-    public IIcon getOrnament(ItemStack s) {
+    public IIcon getOrnament(ItemStack stack) {
         return this.ornIcon;
     }
 
-    public String getSortingHelper(ItemStack s) {
-        return "MACE" + super.getSortingHelper(s);
+    public String getSortingHelper(ItemStack stack) {
+        return "MACE" + super.getSortingHelper(stack);
     }
 
-    public int getFocusColor(ItemStack s) {
+    public int getFocusColor(ItemStack stack) {
         return 3289650;
     }
 
@@ -71,20 +70,20 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         return this.isUpgradedWith(stack, bloodlust) ? mageMAceCostBloodlust : mageMaceCostBase;
     }
 
-    public int getActivationCooldown(ItemStack s) {
+    public int getActivationCooldown(ItemStack stack) {
         return -1;
     }
 
-    public boolean isVisCostPerTick(ItemStack s) {
+    public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
-    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack s) {
+    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return WandFocusAnimation.WAVE;
     }
 
-    public ItemStack onFocusRightClick(ItemStack s, World w, EntityPlayer p, MovingObjectPosition mop) {
-        return s;
+    public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
+        return stack;
     }
 
     @Override
@@ -93,16 +92,16 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         list.add("");
         list.add(
                 EnumChatFormatting.BLUE + "+"
-                        + getFocusDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage)
+                        + TaintedMagicHelper.getFocusDamageWithPotency(stack, ConfigHandler.magesMaceBaseDamage)
                         + " "
                         + StatCollector.translateToLocal("text.attackdamageequipped"));
-        list.add(
-                EnumChatFormatting.BLUE
-                        + String.format("Staff gives x%.1f Damage", ConfigHandler.magesMaceStaffMultiple));
+
+        if (ConfigHandler.magesMaceStaffMultiple != 1)
+            list = TaintedMagicHelper.addTooltipStaffMultiplier(list, ConfigHandler.magesMaceStaffMultiple);
         list.add("");
     }
 
-    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int rank) {
+    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:
             case 2:
@@ -117,8 +116,8 @@ public class ItemFocusMageMace extends ItemFocusBasic {
 
     }
 
-    public boolean canApplyUpgrade(ItemStack s, EntityPlayer p, FocusUpgradeType t, int rank) {
-        return (!t.equals(this.bloodlust))
-                || (ThaumcraftApiHelper.isResearchComplete(p.getCommandSenderName(), "BLOODLUSTUPGRADE"));
+    public boolean canApplyUpgrade(ItemStack stack, EntityPlayer player, FocusUpgradeType focusUpgradeType, int rank) {
+        return (!focusUpgradeType.equals(bloodlust))
+                || (ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), "BLOODLUSTUPGRADE"));
     }
 }

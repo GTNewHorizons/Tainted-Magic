@@ -1,5 +1,6 @@
 package taintedmagic.common.items.wand.foci;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -12,6 +13,8 @@ import net.minecraft.world.World;
 
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityEldritchOrbAttack;
+import taintedmagic.common.handler.ConfigHandler;
+import taintedmagic.common.helper.TaintedMagicHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.FocusUpgradeType;
@@ -31,17 +34,27 @@ public class ItemFocusEldritch extends ItemFocusBasic {
             new AspectList().add(Aspect.MIND, 1).add(Aspect.HEAL, 1));
     IIcon depthIcon = null;
 
-    private static final AspectList costBase = new AspectList().add(Aspect.ENTROPY, 20).add(Aspect.FIRE, 20);
-    private static final AspectList costSane = new AspectList().add(Aspect.ENTROPY, 20).add(Aspect.FIRE, 50)
-            .add(Aspect.ORDER, 20);
-    private static final AspectList costCorrosive = new AspectList().add(Aspect.ENTROPY, 50).add(Aspect.FIRE, 20)
-            .add(Aspect.WATER, 20);
-
-    long soundDelay = 0L;
+    private final AspectList costBase = new AspectList().add(Aspect.ENTROPY, 250).add(Aspect.AIR, 150)
+            .add(Aspect.FIRE, 250);
+    private final AspectList costSane = new AspectList().add(Aspect.ORDER, 100).add(Aspect.WATER, 80);
+    private final AspectList costCorrosive = new AspectList().add(Aspect.ENTROPY, 150).add(Aspect.FIRE, 120);
 
     public ItemFocusEldritch() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
         this.setUnlocalizedName("ItemFocusEldritch");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+        super.addInformation(stack, player, list, par4);
+        if (ConfigHandler.eldritchStaffMultiple != 1) {
+            list = TaintedMagicHelper.addTooltipDamageAndStaffMultiplier(
+                    list,
+                    ConfigHandler.eldritchBaseDamage,
+                    stack,
+                    ConfigHandler.eldritchStaffMultiple);
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -50,63 +63,73 @@ public class ItemFocusEldritch extends ItemFocusBasic {
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusEldritch_depth");
     }
 
-    public IIcon getFocusDepthLayerIcon(ItemStack s) {
+    public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
-    public String getSortingHelper(ItemStack s) {
-        return "ELDRITCH" + super.getSortingHelper(s);
+    public String getSortingHelper(ItemStack stack) {
+        return "ELDRITCH" + super.getSortingHelper(stack);
     }
 
-    public int getFocusColor(ItemStack s) {
+    public int getFocusColor(ItemStack stack) {
         return 0x000018;
     }
 
-    public AspectList getVisCost(ItemStack s) {
-        return isUpgradedWith(s, ItemFocusTaint.corrosive) ? costCorrosive
-                : isUpgradedWith(s, sanity) ? costSane : costBase;
+    public AspectList getVisCost(ItemStack stack) {
+        AspectList list = costBase.copy();
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, ItemFocusTaint.corrosive)) {
+            list.add(costCorrosive);
+        }
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, sanity)) {
+            list.add(costSane);
+        }
+
+        return list;
     }
 
-    public int getActivationCooldown(ItemStack s) {
-        return 600;
+    public int getActivationCooldown(ItemStack stack) {
+        return 1000;
     }
 
-    public boolean isVisCostPerTick(ItemStack s) {
+    public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
-    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack s) {
+    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
-    public ItemStack onFocusRightClick(ItemStack s, World w, EntityPlayer p, MovingObjectPosition mop) {
-        ItemWandCasting wand = (ItemWandCasting) s.getItem();
+    public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
+        ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
-        if (!w.isRemote) {
-            int potency = wand.getFocusPotency(s);
-            if (wand.consumeAllVis(s, p, getVisCost(s), true, false)) {
-                EntityEldritchOrbAttack orb = null;
-                orb = new EntityEldritchOrbAttack(w, p, isUpgradedWith(wand.getFocusItem(s), ItemFocusTaint.corrosive));
-                orb.dmg = (10F + potency);
-                w.spawnEntityInWorld(orb);
-                if (!isUpgradedWith(wand.getFocusItem(s), sanity)) {
-                    Random rand = new Random();
-                    int randomInt = rand.nextInt(10);
-                    if (randomInt == 5) {
-                        Thaumcraft.addStickyWarpToPlayer(p, 1);
-                    }
+        if (!world.isRemote && wand != null && wand.consumeAllVis(stack, player, getVisCost(stack), true, false)) {
+            EntityEldritchOrbAttack orb = new EntityEldritchOrbAttack(
+                    world,
+                    player,
+                    isUpgradedWith(wand.getFocusItem(stack), ItemFocusTaint.corrosive));
+
+            orb.dmg = TaintedMagicHelper.getFocusDamageWithPotency(
+                    stack,
+                    ConfigHandler.eldritchBaseDamage,
+                    ConfigHandler.eldritchStaffMultiple);
+            world.spawnEntityInWorld(orb);
+
+            if (!isUpgradedWith(wand.getFocusItem(stack), sanity)) {
+                Random rand = new Random();
+                int randomInt = rand.nextInt(10);
+                if (randomInt == 5) {
+                    Thaumcraft.addStickyWarpToPlayer(player, 1);
                 }
             }
-            w.playSoundAtEntity(p, "thaumcraft:egattack", 0.4F, 1.0F + w.rand.nextFloat() * 0.1F);
+            world.playSoundAtEntity(player, "thaumcraft:egattack", 0.4F, 1.0F + world.rand.nextFloat() * 0.1F);
         }
-        p.swingItem();
-        return s;
+        player.swingItem();
+        return stack;
     }
 
-    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int rank) {
+    public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 2:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 3:
@@ -115,8 +138,9 @@ public class ItemFocusEldritch extends ItemFocusBasic {
             case 4:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 5:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, this.sanity };
+                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, sanity };
+            default:
+                return null;
         }
-        return null;
     }
 }
