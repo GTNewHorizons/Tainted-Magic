@@ -26,7 +26,6 @@ import taintedmagic.common.helper.TaintedMagicHelper;
 import taintedmagic.common.items.wand.foci.ItemFocusMageMace;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.ThaumcraftApiHelper;
-import thaumcraft.api.wands.FocusUpgradeType;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.common.Thaumcraft;
@@ -90,33 +89,30 @@ public class TaintedMagicEventHandler {
                         ConfigHandler.magesMaceBaseDamage,
                         ConfigHandler.magesMaceStaffMultiple);
 
-                setDamage(stack, newDamage, wand.getFocusPotency(stack));
-                stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", true);
-                stack.stackTagCompound.getCompoundTag("MageMace").setInteger("potency", wand.getFocusPotency(stack));
+                setDamage(stack, newDamage, wand.getFocusPotency(stack), true);
             }
             // set base damage
             else if (isMageMaceActive && wand.getFocus(stack) != ItemRegistry.ItemFocusMageMace) {
-                if (wand.getRod(stack) instanceof StaffRod) resetDamage(stack, 6);
-                else resetDamage(stack, 0);
+                if (wand.getRod(stack) instanceof StaffRod) setDamage(stack, 6, 0, false);
+                else setDamage(stack, 0, 0, false);
             }
         }
     }
 
-    private void resetDamage(ItemStack stack, int damage) {
-        setDamage(stack, damage, 0);
-        stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", false);
-        stack.stackTagCompound.getCompoundTag("MageMace").setInteger("potency", 0);
-    }
+    private void setDamage(ItemStack stack, int newDamage, int potency, boolean isActive) {
 
-    private void setDamage(ItemStack stack, int newDamage, int potency) {
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        if (!stack.getTagCompound().hasKey("MageMace")) {
+            stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", isActive);
+        }
 
-        if (stack.hasTagCompound() && !stack.stackTagCompound.hasKey("MageMace")) {
-            NBTTagCompound tagMageMace = new NBTTagCompound();
-            tagMageMace.setBoolean("isMageMaceActive", true);
-            tagMageMace.setInteger("countOfPotency", potency);
-            stack.stackTagCompound.setTag("MageMace", tagMageMace);
-        } else stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", true);
+        NBTTagCompound tagMageMace = stack.stackTagCompound.getCompoundTag("MageMace");
+        tagMageMace.setBoolean("isMageMaceActive", true);
+        tagMageMace.setInteger("countOfPotency", potency);
 
+        // AttributeModifier and damage
         NBTTagCompound tag = new NBTTagCompound();
         NBTTagList tags = new NBTTagList();
         tag.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
@@ -159,13 +155,6 @@ public class TaintedMagicEventHandler {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (UpdateHandler.show) event.player.addChatMessage(new ChatComponentText(UpdateHandler.updateStatus));
-    }
-
-    public static int getFocusDamageWithPotency(ItemStack stack, int damage) {
-        if (stack != null && stack.getItem() instanceof ItemFocusMageMace) {
-            final ItemFocusMageMace cap = (ItemFocusMageMace) stack.getItem();
-            return (int) ((damage + damage * cap.getUpgradeLevel(stack, FocusUpgradeType.potency) * 0.2) + 0.5);
-        } else return damage;
     }
 
     @SubscribeEvent

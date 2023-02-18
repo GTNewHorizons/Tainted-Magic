@@ -42,10 +42,10 @@ public class ItemFocusTaint extends ItemFocusBasic {
             new AspectList().add(Aspect.TAINT, 1).add(Aspect.POISON, 1));
     IIcon depthIcon = null;
 
-    private final AspectList costBase = new AspectList().add(Aspect.AIR, 120).add(Aspect.WATER, 120);
-    private final AspectList costTainturgy = new AspectList().add(Aspect.ORDER, 80);
-    private final AspectList costCorrosive = new AspectList().add(Aspect.ENTROPY, 80).add(Aspect.FIRE, 60);
-    private final AspectList costEnlarge = new AspectList().add(Aspect.AIR, 80).add(Aspect.WATER, 80);
+    private final AspectList costBase = new AspectList().add(Aspect.AIR, 80).add(Aspect.WATER, 80);
+    private final AspectList costTainturgy = new AspectList().add(Aspect.ORDER, 60);
+    private final AspectList costCorrosive = new AspectList().add(Aspect.ENTROPY, 60).add(Aspect.FIRE, 60);
+    private final AspectList costEnlarge = new AspectList().add(Aspect.AIR, 60).add(Aspect.WATER, 60);
 
     public ItemFocusTaint() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
@@ -53,23 +53,28 @@ public class ItemFocusTaint extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusTaint");
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusTaint_depth");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "TAINT" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 8073200;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         AspectList list = costBase.copy();
         if (TaintedMagicHelper.hasFocusUpgrade(stack, tainturgy)) {
@@ -85,24 +90,29 @@ public class ItemFocusTaint extends ItemFocusBasic {
         return list;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return -1;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack stack) {
         return true;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.CHARGE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         player.setItemInUse(stack, 2147483647);
         WandManager.setCooldown(player, -1);
         return stack;
     }
 
+    @Override
     public void onUsingFocusTick(ItemStack stack, EntityPlayer player, int count) {
         ItemWandCasting wand = (ItemWandCasting) stack.getItem();
         if (!wand.consumeAllVis(stack, player, getVisCost(stack), false, false)) {
@@ -158,6 +168,7 @@ public class ItemFocusTaint extends ItemFocusBasic {
         }
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:

@@ -46,26 +46,32 @@ public class ItemFocusVisShard extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusVisShard");
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "SHARD" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 10037693;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return 500;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
@@ -89,6 +95,7 @@ public class ItemFocusVisShard extends ItemFocusBasic {
         return stack;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         AspectList list = costBase.copy();
         if (TaintedMagicHelper.hasFocusUpgrade(stack, persistant)) {
@@ -111,6 +118,7 @@ public class ItemFocusVisShard extends ItemFocusBasic {
         }
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int r) {
         switch (r) {
             case 1:

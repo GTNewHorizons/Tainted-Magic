@@ -34,15 +34,16 @@ public class ItemFocusMageMace extends ItemFocusBasic {
             "focus.upgrade.bloodlust.name",
             "focus.upgrade.bloodlust.text",
             new AspectList().add(Aspect.WEAPON, 1).add(Aspect.HEAL, 1));
-    public final AspectList mageMaceCostBase = new AspectList().add(Aspect.EARTH, 120).add(Aspect.ENTROPY, 120)
-            .add(Aspect.ORDER, 80);
-    public final AspectList mageMAceCostBloodlust = mageMaceCostBase.copy().add(Aspect.FIRE, 80);
+    public final AspectList mageMaceCostBase = new AspectList().add(Aspect.EARTH, 220).add(Aspect.ENTROPY, 220)
+            .add(Aspect.ORDER, 180);
+    public final AspectList mageMAceCostBloodlust = mageMaceCostBase.copy().add(Aspect.FIRE, 160);
 
     public ItemFocusMageMace() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
         this.setUnlocalizedName("ItemFocusMageMace");
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusMageMace");
@@ -50,38 +51,47 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         this.ornIcon = ir.registerIcon("taintedmagic:ItemFocusMageMace_orn");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
+    @Override
     public IIcon getOrnament(ItemStack stack) {
         return this.ornIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "MACE" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 3289650;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         return this.isUpgradedWith(stack, bloodlust) ? mageMAceCostBloodlust : mageMaceCostBase;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return -1;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return WandFocusAnimation.WAVE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         return stack;
     }
@@ -101,6 +111,7 @@ public class ItemFocusMageMace extends ItemFocusBasic {
         list.add("");
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:
@@ -116,6 +127,7 @@ public class ItemFocusMageMace extends ItemFocusBasic {
 
     }
 
+    @Override
     public boolean canApplyUpgrade(ItemStack stack, EntityPlayer player, FocusUpgradeType focusUpgradeType, int rank) {
         return (!focusUpgradeType.equals(bloodlust))
                 || (ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), "BLOODLUSTUPGRADE"));

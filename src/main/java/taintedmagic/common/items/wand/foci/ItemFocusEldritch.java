@@ -1,7 +1,6 @@
 package taintedmagic.common.items.wand.foci;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,24 +56,29 @@ public class ItemFocusEldritch extends ItemFocusBasic {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusEldritch");
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusEldritch_depth");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "ELDRITCH" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 0x000018;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         AspectList list = costBase.copy();
         if (TaintedMagicHelper.hasFocusUpgrade(stack, ItemFocusTaint.corrosive)) {
@@ -87,18 +91,22 @@ public class ItemFocusEldritch extends ItemFocusBasic {
         return list;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return 1000;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
@@ -115,8 +123,7 @@ public class ItemFocusEldritch extends ItemFocusBasic {
             world.spawnEntityInWorld(orb);
 
             if (!isUpgradedWith(wand.getFocusItem(stack), sanity)) {
-                Random rand = new Random();
-                int randomInt = rand.nextInt(10);
+                int randomInt = world.rand.nextInt(10);
                 if (randomInt == 5) {
                     Thaumcraft.addStickyWarpToPlayer(player, 1);
                 }
@@ -127,6 +134,7 @@ public class ItemFocusEldritch extends ItemFocusBasic {
         return stack;
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:

@@ -31,39 +31,48 @@ public class ItemFocusMeteorology extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusMeteorology");
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusMeteorology_depth");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "RAIN" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 0x23D9EA;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         return costBase;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return 1;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         WandManager.setCooldown(player, 30000);
         ItemWandCasting wand = (ItemWandCasting) stack.getItem();
@@ -76,11 +85,13 @@ public class ItemFocusMeteorology extends ItemFocusBasic {
         return stack;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack stack) {
         return TaintedMagic.rarityCreation;
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:

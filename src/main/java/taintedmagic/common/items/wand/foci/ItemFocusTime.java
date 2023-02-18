@@ -33,40 +33,49 @@ public class ItemFocusTime extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusTime");
         this.depthIcon = ir.registerIcon("taintedmagic:ItemFocusMeteorology_depth");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack s) {
         return this.depthIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack s) {
         return "TIME" + super.getSortingHelper(s);
     }
 
+    @Override
     public int getFocusColor(ItemStack s) {
         EntityPlayer player = TaintedMagic.proxy.getClientPlayer();
         return player == null ? 0xFFFFFF : Color.HSBtoRGB(player.ticksExisted * 16 % 360 / 360F, 1F, 1F);
     }
 
+    @Override
     public AspectList getVisCost(ItemStack s) {
         return costBase;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack s) {
         return 1;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack s) {
         return false;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack s) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack s, World w, EntityPlayer p, MovingObjectPosition mop) {
         WandManager.setCooldown(p, 30000);
         ItemWandCasting wand = (ItemWandCasting) s.getItem();
@@ -85,10 +94,12 @@ public class ItemFocusTime extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public EnumRarity getRarity(ItemStack s) {
         return TaintedMagic.rarityCreation;
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int r) {
         switch (r) {
             case 1:

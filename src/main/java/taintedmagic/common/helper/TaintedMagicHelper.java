@@ -73,10 +73,10 @@ public class TaintedMagicHelper {
                 ItemWandCasting wand = (ItemWandCasting) item;
                 foci = wand.getFocus(stack);
                 fociStack = wand.getFocusItem(stack);
-            } else {
+            } else if (item instanceof ItemFocusBasic) {
                 foci = (ItemFocusBasic) item;
                 fociStack = stack;
-            }
+            } else return false;
             return foci.isUpgradedWith(fociStack, upgrade);
         }
         return false;
@@ -92,10 +92,10 @@ public class TaintedMagicHelper {
                 ItemWandCasting wand = (ItemWandCasting) item;
                 foci = wand.getFocus(stack);
                 fociStack = wand.getFocusItem(stack);
-            } else {
+            } else if (item instanceof ItemFocusBasic) {
                 foci = (ItemFocusBasic) item;
                 fociStack = stack;
-            }
+            } else return 0;
             return foci.getUpgradeLevel(fociStack, upgrade);
         }
         return 0;

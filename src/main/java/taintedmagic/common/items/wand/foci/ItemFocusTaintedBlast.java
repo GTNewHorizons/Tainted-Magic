@@ -27,9 +27,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFocusTaintedBlast extends ItemFocusBasic {
 
-    private static final AspectList costBase = new AspectList().add(Aspect.ENTROPY, 500).add(Aspect.EARTH, 500)
-            .add(Aspect.WATER, 500);
-    private final AspectList costEnlarge = new AspectList().add(Aspect.ENTROPY, 50).add(Aspect.EARTH, 50);
+    private static final AspectList costBase = new AspectList().add(Aspect.ENTROPY, 1000).add(Aspect.EARTH, 1000)
+            .add(Aspect.WATER, 1000);
+    private final AspectList costEnlarge = new AspectList().add(Aspect.ENTROPY, 250).add(Aspect.EARTH, 250)
+            .add(Aspect.WATER, 250);
 
     public static IIcon depthIcon;
     public static IIcon ornIcon;
@@ -46,22 +47,27 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
         this.ornIcon = ir.registerIcon("taintedmagic:ItemFocusTaintedBlast_orn");
     }
 
+    @Override
     public IIcon getFocusDepthLayerIcon(ItemStack stack) {
         return this.depthIcon;
     }
 
+    @Override
     public IIcon getOrnament(ItemStack stack) {
         return this.ornIcon;
     }
 
+    @Override
     public String getSortingHelper(ItemStack stack) {
         return "SHOCKWAVE" + super.getSortingHelper(stack);
     }
 
+    @Override
     public int getFocusColor(ItemStack stack) {
         return 13107455;
     }
 
+    @Override
     public AspectList getVisCost(ItemStack stack) {
         AspectList list = costBase.copy();
         if (TaintedMagicHelper.hasFocusUpgrade(stack, FocusUpgradeType.enlarge)) {
@@ -72,14 +78,17 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
         return list;
     }
 
+    @Override
     public int getActivationCooldown(ItemStack stack) {
         return 6000;
     }
 
+    @Override
     public boolean isVisCostPerTick(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
@@ -103,11 +112,12 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
                 ConfigHandler.taintedBlastStaffMultiple);
     }
 
+    @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
         ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
         if (wand.consumeAllVis(stack, player, getVisCost(stack), true, false)) {
-            final double radius = 10D + 2 * this.getUpgradeLevel(stack, FocusUpgradeType.enlarge);
+            final double radius = 10D + 2 * TaintedMagicHelper.getFocusLevelUpgrade(stack, FocusUpgradeType.enlarge);
             final float damage = TaintedMagicHelper.getFocusDamageWithPotency(
                     stack,
                     ConfigHandler.taintedBlastBaseDamage,
@@ -122,7 +132,7 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
                             player.posZ,
                             player.posX + 1,
                             player.posY + 1,
-                            player.posZ + 1).expand(radius, 10D, radius));
+                            player.posZ + 1).expand(radius, radius, radius));
             if (ents != null && ents.size() > 0) {
                 for (EntityLivingBase e : ents) {
                     if (e != player && e.isEntityAlive() && !e.isEntityInvulnerable()) {
@@ -138,6 +148,7 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
         return null;
     }
 
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack stack, int rank) {
         switch (rank) {
             case 1:
