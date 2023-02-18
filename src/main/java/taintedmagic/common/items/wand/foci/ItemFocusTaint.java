@@ -107,7 +107,7 @@ public class ItemFocusTaint extends ItemFocusBasic {
 
     @Override
     public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
-        player.setItemInUse(stack, 2147483647);
+        player.setItemInUse(stack, Integer.MAX_VALUE);
         WandManager.setCooldown(player, -1);
         return stack;
     }

@@ -71,8 +71,8 @@ public class ItemFocusTaintedBlast extends ItemFocusBasic {
     public AspectList getVisCost(ItemStack stack) {
         AspectList list = costBase.copy();
         if (TaintedMagicHelper.hasFocusUpgrade(stack, FocusUpgradeType.enlarge)) {
-            for (int i = 0; i < TaintedMagicHelper.getFocusLevelUpgrade(stack, FocusUpgradeType.enlarge); i++)
-                list.add(costEnlarge);
+            int focusUpgradeLevel = TaintedMagicHelper.getFocusLevelUpgrade(stack, FocusUpgradeType.enlarge);
+            for (int i = 0; i < focusUpgradeLevel; i++) list.add(costEnlarge);
         }
 
         return list;

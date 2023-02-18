@@ -105,7 +105,7 @@ public class TaintedMagicEventHandler {
             stack.setTagCompound(new NBTTagCompound());
         }
         if (!stack.getTagCompound().hasKey("MageMace")) {
-            stack.stackTagCompound.getCompoundTag("MageMace").setBoolean("isMageMaceActive", isActive);
+            stack.stackTagCompound.setTag("MageMace", new NBTTagCompound());
         }
 
         NBTTagCompound tagMageMace = stack.stackTagCompound.getCompoundTag("MageMace");
