@@ -81,7 +81,7 @@ public class ItemFocusTime extends ItemFocusBasic {
         ItemWandCasting wand = (ItemWandCasting) s.getItem();
 
         if (wand.consumeAllVis(s, p, getVisCost(s), true, false)) {
-            w.setWorldTime( w.getWorldTime() + 12000);
+            w.setWorldTime(w.getWorldTime() + 12000);
             p.playSound("thaumcraft:wand", 0.5F, 1.0F);
         }
         return s;
