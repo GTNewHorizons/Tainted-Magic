@@ -1,5 +1,7 @@
 package taintedmagic.common.items.wand.foci;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,6 +13,8 @@ import net.minecraft.world.World;
 
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityHomingShard;
+import taintedmagic.common.handler.ConfigHandler;
+import taintedmagic.common.helper.TaintedMagicHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.FocusUpgradeType;
@@ -25,10 +29,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ItemFocusVisShard extends ItemFocusBasic {
 
-    private static final AspectList cost = new AspectList().add(Aspect.FIRE, 1).add(Aspect.ENTROPY, 1)
-            .add(Aspect.AIR, 1);
-    private static final AspectList costPersistant = new AspectList().add(Aspect.FIRE, 1).add(Aspect.ENTROPY, 1)
-            .add(Aspect.WATER, 1).add(Aspect.AIR, 1);
+    private static final AspectList costBase = new AspectList().add(Aspect.FIRE, 120).add(Aspect.ENTROPY, 120)
+            .add(Aspect.AIR, 120);
+    private static final AspectList costPersistant = new AspectList().add(Aspect.WATER, 120);
 
     public static FocusUpgradeType persistant = new FocusUpgradeType(
             69,
@@ -43,63 +46,90 @@ public class ItemFocusVisShard extends ItemFocusBasic {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerIcons(IIconRegister ir) {
         this.icon = ir.registerIcon("taintedmagic:ItemFocusVisShard");
     }
 
-    public String getSortingHelper(ItemStack s) {
-        return "SHARD" + super.getSortingHelper(s);
+    @Override
+    public String getSortingHelper(ItemStack stack) {
+        return "SHARD" + super.getSortingHelper(stack);
     }
 
-    public int getFocusColor(ItemStack s) {
+    @Override
+    public int getFocusColor(ItemStack stack) {
         return 10037693;
     }
 
-    public int getActivationCooldown(ItemStack s) {
-        return 300;
+    @Override
+    public int getActivationCooldown(ItemStack stack) {
+        return 500;
     }
 
-    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack s) {
+    @Override
+    public ItemFocusBasic.WandFocusAnimation getAnimation(ItemStack stack) {
         return ItemFocusBasic.WandFocusAnimation.WAVE;
     }
 
-    public ItemStack onFocusRightClick(ItemStack s, World w, EntityPlayer p, MovingObjectPosition mop) {
-        ItemWandCasting wand = (ItemWandCasting) s.getItem();
+    @Override
+    public ItemStack onFocusRightClick(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop) {
+        ItemWandCasting wand = (ItemWandCasting) stack.getItem();
 
-        Entity look = EntityUtils.getPointedEntity(p.worldObj, p, 0.0D, 32.0D, 1.1F);
-        if (look != null && look instanceof EntityLivingBase) {
-            if (!w.isRemote) {
+        Entity look = EntityUtils.getPointedEntity(player.worldObj, player, 0.0D, 32.0D, 1.1F);
+        if (look instanceof EntityLivingBase && wand.consumeAllVis(stack, player, getVisCost(stack), true, false)) {
+            if (!world.isRemote) {
                 EntityHomingShard blast = new EntityHomingShard(
-                        w,
-                        p,
+                        world,
+                        player,
                         (EntityLivingBase) look,
-                        wand.getFocusPotency(s),
-                        isUpgradedWith(wand.getFocusItem(s), persistant));
-                w.spawnEntityInWorld(blast);
-                w.playSoundAtEntity(blast, "taintedmagic:shard", 0.3F, 1.1F + w.rand.nextFloat() * 0.1F);
+                        (int) TaintedMagicHelper.getFocusDamageWithPotency(
+                                stack,
+                                ConfigHandler.visShardBaseDamage,
+                                ConfigHandler.visShardStaffMultiple),
+                        isUpgradedWith(wand.getFocusItem(stack), persistant));
+                world.spawnEntityInWorld(blast);
+                world.playSoundAtEntity(blast, "taintedmagic:shard", 0.3F, 1.1F + world.rand.nextFloat() * 0.1F);
             }
-            p.swingItem();
+            player.swingItem();
         }
-        return s;
+        return stack;
     }
 
-    public AspectList getVisCost(ItemStack s) {
-        return isUpgradedWith(s, persistant) ? costPersistant : cost;
+    @Override
+    public AspectList getVisCost(ItemStack stack) {
+        AspectList list = costBase.copy();
+        if (TaintedMagicHelper.hasFocusUpgrade(stack, persistant)) {
+            list.add(costPersistant);
+        }
+
+        return list;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+        super.addInformation(stack, player, list, par4);
+        if (ConfigHandler.taintStormStaffMultiple != 1) {
+            list = TaintedMagicHelper.addTooltipDamageAndStaffMultiplier(
+                    list,
+                    ConfigHandler.visShardBaseDamage,
+                    stack,
+                    ConfigHandler.visShardStaffMultiple);
+        }
+    }
+
+    @Override
     public FocusUpgradeType[] getPossibleUpgradesByRank(ItemStack s, int r) {
         switch (r) {
             case 1:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 2:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 3:
-                return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 4:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency };
             case 5:
                 return new FocusUpgradeType[] { FocusUpgradeType.frugal, FocusUpgradeType.potency, persistant };
+            default:
+                return null;
         }
-        return null;
     }
 }
