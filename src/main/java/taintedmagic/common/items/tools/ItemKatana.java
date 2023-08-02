@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.api.IHeldItemHUD;
 import taintedmagic.api.IRenderInventoryItem;
 import taintedmagic.client.model.ModelKatana;
@@ -47,8 +49,6 @@ import thaumcraft.client.lib.UtilsFX;
 import thaumcraft.codechicken.lib.vec.Vector3;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.entities.projectile.EntityExplosiveOrb;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRenderInventoryItem, IHeldItemHUD {
 
@@ -72,8 +72,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
 
     public static final ModelKatana KATANA = new ModelKatana();
     public static final ModelSaya SAYA = new ModelSaya();
-
-    private int ticksInUse = 0;
 
     public ItemKatana() {
         setCreativeTab(TaintedMagic.tabTM);
@@ -212,8 +210,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
     public void onUsingTick(final ItemStack stack, final EntityPlayer player, final int i) {
         super.onUsingTick(stack, player, i);
 
-        ticksInUse = getMaxItemUseDuration(stack) - i;
-
         final float j = 0.75F + (float) Math.random() * 0.25F;
         if (player.ticksExisted % 5 == 0) {
             player.worldObj.playSoundAtEntity(player, "thaumcraft:wind", j * 0.1F, j);
@@ -224,7 +220,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
     public void onPlayerStoppedUsing(final ItemStack stack, final World world, final EntityPlayer player, final int i) {
         super.onPlayerStoppedUsing(stack, world, player, i);
 
-        if (isFullyCharged(player)) {
+        if (getMaxItemUseDuration(stack) - i >= CHARGE_TICKS) {
             if (!hasAnyInscription(stack) || player.isSneaking()) {
                 if (world.isRemote) {
                     final MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
@@ -236,8 +232,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
                     }
 
                     if (mop.entityHit != null) {
-                        PacketHandler.INSTANCE.sendToServer(
-                                new PacketKatanaAttack(mop.entityHit, player, getAttackDamage(stack) * mul));
+                        PacketHandler.INSTANCE.sendToServer(new PacketKatanaAttack(mop.entityHit));
                     }
                 }
                 player.worldObj.playSoundAtEntity(
@@ -369,11 +364,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
         }
     }
 
-    private boolean isFullyCharged(final EntityPlayer player) {
-        final float f = Math.min((float) ticksInUse / (float) CHARGE_TICKS, 1.0F);
-        return f == 1.0F;
-    }
-
     public static boolean hasAnyInscription(final ItemStack stack) {
         return stack.hasTagCompound() && stack.stackTagCompound.hasKey(TAG_INSCRIPTION);
     }
@@ -401,7 +391,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable, IRend
         return 0;
     }
 
-    private float getAttackDamage(final ItemStack stack) {
+    public static float getAttackDamage(final ItemStack stack) {
         switch (stack.getItemDamage()) {
             case 0:
                 return 14.25F;
