@@ -18,12 +18,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.wands.WandManager;
-import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class ItemThaumicDisassembler extends Item {
 

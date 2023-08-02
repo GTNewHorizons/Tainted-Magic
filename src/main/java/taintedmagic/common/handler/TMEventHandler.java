@@ -19,6 +19,10 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import baubles.api.BaublesApi;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.common.items.equipment.ItemLumosRing;
 import taintedmagic.common.items.tools.ItemHollowDagger;
@@ -33,10 +37,6 @@ import thaumcraft.common.items.ItemEssence;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketResearchComplete;
-import baubles.api.BaublesApi;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class TMEventHandler {
 

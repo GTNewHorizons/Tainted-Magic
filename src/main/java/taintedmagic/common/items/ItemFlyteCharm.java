@@ -16,6 +16,11 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.api.IRenderInventoryItem;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.helper.TaintedMagicHelper;
@@ -23,11 +28,6 @@ import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.client.lib.UtilsFX;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFlyteCharm extends Item implements IWarpingGear, IRenderInventoryItem {
 

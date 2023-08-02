@@ -5,12 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import baubles.api.BaublesApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.codechicken.lib.vec.Vector3;
 import thaumcraft.common.items.baubles.ItemAmuletVis;
 import thaumcraft.common.items.wands.ItemWandCasting;
-import baubles.api.BaublesApi;
 
 public class TaintedMagicHelper {
 

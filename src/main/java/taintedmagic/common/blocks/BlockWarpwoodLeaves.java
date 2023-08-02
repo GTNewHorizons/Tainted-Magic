@@ -17,10 +17,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import taintedmagic.common.TaintedMagic;
-import taintedmagic.common.registry.BlockRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.common.TaintedMagic;
+import taintedmagic.common.registry.BlockRegistry;
 
 public class BlockWarpwoodLeaves extends Block implements IShearable {
 

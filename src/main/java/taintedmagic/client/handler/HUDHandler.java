@@ -13,11 +13,11 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
-import taintedmagic.api.IHeldItemHUD;
-import taintedmagic.common.TaintedMagic;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.api.IHeldItemHUD;
+import taintedmagic.common.TaintedMagic;
 
 public final class HUDHandler {
 

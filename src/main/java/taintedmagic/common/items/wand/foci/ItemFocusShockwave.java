@@ -16,6 +16,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.helper.TaintedMagicHelper;
 import thaumcraft.api.aspects.Aspect;
@@ -26,8 +28,6 @@ import thaumcraft.client.fx.bolt.FXLightningBolt;
 import thaumcraft.codechicken.lib.vec.Vector3;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFocusShockwave extends ItemFocusBasic {
 

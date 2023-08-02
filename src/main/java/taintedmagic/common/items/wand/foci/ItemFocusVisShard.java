@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityHomingShard;
 import thaumcraft.api.aspects.Aspect;
@@ -18,8 +20,6 @@ import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXSparkle;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.utils.EntityUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is based off of ItemFocusShard.class created by <Azanor> as part of Thaumcraft 5.

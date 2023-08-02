@@ -12,9 +12,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
-import taintedmagic.common.TaintedMagic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.common.TaintedMagic;
 
 public class ItemMaterial extends Item {
 

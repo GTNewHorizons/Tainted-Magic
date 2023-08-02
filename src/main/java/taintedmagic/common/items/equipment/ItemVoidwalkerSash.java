@@ -11,6 +11,9 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import cpw.mods.fml.common.FMLCommonHandler;
 import taintedmagic.client.handler.SashClientHandler;
 import taintedmagic.client.handler.SashServerHandler;
 import taintedmagic.common.TaintedMagic;
@@ -18,9 +21,6 @@ import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.ItemRunic;
 import thaumcraft.common.Thaumcraft;
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpingGear, IBauble {
 

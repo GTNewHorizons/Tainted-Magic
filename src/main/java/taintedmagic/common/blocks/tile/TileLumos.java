@@ -2,11 +2,11 @@ package taintedmagic.common.blocks.tile;
 
 import net.minecraft.tileentity.TileEntity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.blocks.BlockLumos;
 import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXSparkle;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileLumos extends TileEntity {
 

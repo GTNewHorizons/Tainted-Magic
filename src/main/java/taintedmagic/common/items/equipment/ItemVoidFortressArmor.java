@@ -11,14 +11,14 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.armor.ItemFortressArmor;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemVoidFortressArmor extends ItemFortressArmor implements IWarpingGear, IVisDiscountGear {
 

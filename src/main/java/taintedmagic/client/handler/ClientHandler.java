@@ -9,11 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 
-import taintedmagic.api.IRenderInventoryItem;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.api.IRenderInventoryItem;
 
 @SideOnly(Side.CLIENT)
 public class ClientHandler {

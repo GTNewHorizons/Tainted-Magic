@@ -5,6 +5,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import taintedmagic.client.handler.SashServerHandler;
 import taintedmagic.common.handler.ConfigHandler;
 import taintedmagic.common.handler.TMEventHandler;
@@ -17,10 +21,6 @@ import taintedmagic.common.registry.OreDictRegistry;
 import taintedmagic.common.registry.RecipeRegistry;
 import taintedmagic.common.registry.ResearchRegistry;
 import taintedmagic.common.registry.TMEntityRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy {
 

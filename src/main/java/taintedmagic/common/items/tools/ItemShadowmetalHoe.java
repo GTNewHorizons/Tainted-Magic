@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IRepairable;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
 

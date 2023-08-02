@@ -6,12 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
-import taintedmagic.api.RecipeVoidBlood;
-import taintedmagic.common.TaintedMagic;
-import thaumcraft.common.config.ConfigItems;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.api.RecipeVoidBlood;
+import taintedmagic.common.TaintedMagic;
+import thaumcraft.common.config.ConfigItems;
 
 public class ItemVoidBlood extends Item {
 

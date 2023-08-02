@@ -18,10 +18,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.BlockRegistry;
 import taintedmagic.common.registry.ItemRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BlockNightshadeBush extends BlockBush {
 

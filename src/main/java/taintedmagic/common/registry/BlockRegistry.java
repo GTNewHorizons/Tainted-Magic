@@ -2,6 +2,7 @@ package taintedmagic.common.registry;
 
 import net.minecraft.block.Block;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import taintedmagic.common.blocks.BlockLumos;
 import taintedmagic.common.blocks.BlockNightshadeBush;
 import taintedmagic.common.blocks.BlockWarpwoodLeaves;
@@ -9,7 +10,6 @@ import taintedmagic.common.blocks.BlockWarpwoodLog;
 import taintedmagic.common.blocks.BlockWarpwoodPlanks;
 import taintedmagic.common.blocks.BlockWarpwoodSapling;
 import taintedmagic.common.blocks.tile.TileLumos;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegistry {
 

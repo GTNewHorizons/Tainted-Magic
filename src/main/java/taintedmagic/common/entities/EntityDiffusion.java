@@ -12,10 +12,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-import thaumcraft.common.Thaumcraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import thaumcraft.common.Thaumcraft;
 
 public class EntityDiffusion extends EntityThrowable {
 

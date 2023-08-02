@@ -15,12 +15,12 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.lib.utils.EntityUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.lib.utils.EntityUtils;
 
 /**
  * This class is based off of EntityHomingShard.class created by <Azanor> as part of Thaumcraft 5

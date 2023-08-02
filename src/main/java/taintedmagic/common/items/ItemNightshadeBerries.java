@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-import taintedmagic.common.TaintedMagic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.common.TaintedMagic;
 
 public class ItemNightshadeBerries extends ItemFood {
 

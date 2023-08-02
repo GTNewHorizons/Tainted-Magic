@@ -1,10 +1,10 @@
 package taintedmagic.common.registry;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityDarkMatter;
 import taintedmagic.common.entities.EntityDiffusion;
 import taintedmagic.common.entities.EntityHomingShard;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class TMEntityRegistry {
 

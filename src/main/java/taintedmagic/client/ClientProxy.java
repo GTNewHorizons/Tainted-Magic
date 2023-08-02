@@ -6,6 +6,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import taintedmagic.client.handler.ClientHandler;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.client.handler.SashClientHandler;
@@ -19,12 +25,6 @@ import taintedmagic.common.entities.EntityDiffusion;
 import taintedmagic.common.entities.EntityHomingShard;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.client.renderers.entity.RenderEldritchOrb;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 

@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.BlockRegistry;
 import thaumcraft.api.aspects.Aspect;
@@ -15,8 +17,6 @@ import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXSparkle;
 import thaumcraft.common.items.wands.ItemWandCasting;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFocusLumos extends ItemFocusBasic {
 

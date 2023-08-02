@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import taintedmagic.common.helper.TaintedMagicHelper;
 import taintedmagic.common.items.tools.ItemKatana;
 import thaumcraft.api.ThaumcraftApi;
@@ -14,7 +15,6 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeRegistry {
 

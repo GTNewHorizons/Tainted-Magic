@@ -6,9 +6,6 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
-import taintedmagic.common.items.equipment.ItemVoidwalkerSash;
-import taintedmagic.common.network.PacketHandler;
-import taintedmagic.common.network.PacketSashToggle;
 import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -16,6 +13,9 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.common.items.equipment.ItemVoidwalkerSash;
+import taintedmagic.common.network.PacketHandler;
+import taintedmagic.common.network.PacketSashToggle;
 
 @SideOnly(Side.CLIENT)
 public class SashKeyListener {

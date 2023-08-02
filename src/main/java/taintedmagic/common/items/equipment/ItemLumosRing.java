@@ -5,11 +5,11 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import taintedmagic.common.TaintedMagic;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.common.TaintedMagic;
 
 public class ItemLumosRing extends Item implements IBauble {
 
