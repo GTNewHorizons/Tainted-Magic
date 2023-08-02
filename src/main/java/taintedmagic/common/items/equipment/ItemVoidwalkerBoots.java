@@ -14,6 +14,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IRepairable;
@@ -23,7 +24,6 @@ import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemVoidwalkerBoots extends ItemArmor
         implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor {

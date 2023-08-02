@@ -6,11 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
-import taintedmagic.api.RecipeVoidsentBlood;
-import taintedmagic.common.TaintedMagic;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.api.RecipeVoidsentBlood;
+import taintedmagic.common.TaintedMagic;
 
 public class ItemVoidsentBlood extends Item {
 

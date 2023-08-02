@@ -2,6 +2,7 @@ package taintedmagic.common.registry;
 
 import net.minecraft.block.Block;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import taintedmagic.common.blocks.BlockShadowOre;
 import taintedmagic.common.blocks.BlockShadowmetal;
 import taintedmagic.common.blocks.BlockWarpwoodLeaves;
@@ -10,7 +11,6 @@ import taintedmagic.common.blocks.BlockWarpwoodPlanks;
 import taintedmagic.common.blocks.BlockWarpwoodSapling;
 import taintedmagic.common.items.blocks.ItemBlockShadowOre;
 import taintedmagic.common.items.blocks.ItemBlockWarpwoodSapling;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegistry {
 

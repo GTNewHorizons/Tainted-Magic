@@ -8,13 +8,13 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagInt;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import thaumcraft.api.ItemApi;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeRegistry {
 

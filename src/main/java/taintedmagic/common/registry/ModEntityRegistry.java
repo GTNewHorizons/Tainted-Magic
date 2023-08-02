@@ -1,10 +1,10 @@
 package taintedmagic.common.registry;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityEldritchOrbAttack;
 import taintedmagic.common.entities.EntityHomingShard;
 import taintedmagic.common.entities.EntityTaintBubble;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ModEntityRegistry {
 

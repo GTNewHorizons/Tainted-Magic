@@ -6,9 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.items.tools.ItemKatana;
 import taintedmagic.common.items.tools.ItemThaumicDisassembler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class HUDHandler {
 

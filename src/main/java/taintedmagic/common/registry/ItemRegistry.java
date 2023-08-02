@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import taintedmagic.common.handler.WandUpdateHandler;
 import taintedmagic.common.items.ItemMagicFunguar;
 import taintedmagic.common.items.ItemMaterial;
@@ -42,7 +43,6 @@ import taintedmagic.common.lib.LibToolMaterials;
 import thaumcraft.api.wands.StaffRod;
 import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemRegistry {
 

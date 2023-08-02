@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.client.renderer.RenderEntityHomingShard;
 import taintedmagic.client.renderer.RenderEntityTaintBubble;
@@ -20,7 +21,6 @@ import thaumcraft.client.fx.ParticleEngine;
 import thaumcraft.client.fx.particles.FXWisp;
 import thaumcraft.client.renderers.entity.RenderEldritchOrb;
 import thaumcraft.codechicken.lib.vec.Vector3;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
 

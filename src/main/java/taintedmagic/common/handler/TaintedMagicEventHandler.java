@@ -21,6 +21,9 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import taintedmagic.api.IBloodlust;
 import taintedmagic.common.helper.TaintedMagicHelper;
 import taintedmagic.common.items.wand.foci.ItemFocusMageMace;
@@ -35,9 +38,6 @@ import thaumcraft.common.items.equipment.ItemCrimsonSword;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.playerdata.PacketResearchComplete;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class TaintedMagicEventHandler {
 
