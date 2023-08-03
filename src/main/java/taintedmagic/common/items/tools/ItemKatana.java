@@ -1,7 +1,9 @@
 package taintedmagic.common.items.tools;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -28,10 +30,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.client.model.ModelKatana;
@@ -59,10 +64,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
     public static final ModelKatana katana = new ModelKatana();
     public static final ModelSaya saya = new ModelSaya();
 
-    public static boolean equipped = false;
     public static float ticksEquipped = 0F;
-
-    public int ticksInUse = 0;
 
     public ItemKatana() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
@@ -169,7 +171,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         return EnumRarity.uncommon;
     }
 
-    public float getAttackDamage(ItemStack s) {
+    public static float getAttackDamage(ItemStack s) {
         switch (s.getItemDamage()) {
             case 0:
                 return 14.25F;
@@ -196,8 +198,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
     public void onUsingTick(ItemStack s, EntityPlayer p, int i) {
         super.onUsingTick(s, p, i);
 
-        this.ticksInUse = getMaxItemUseDuration(s) - i;
-
         float j = 1.0F + ((float) Math.random() * 0.25F);
         if (p.ticksExisted % 5 == 0) p.worldObj.playSoundAtEntity(p, "thaumcraft:wind", j * 0.1F, j);
     }
@@ -207,26 +207,27 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         super.onPlayerStoppedUsing(s, w, p, i);
         Random r = new Random();
 
-        if (!hasAnyInscription(s) || !isFullyCharged(p) || p.isSneaking() || getInscription(s) == 2) {
-            boolean leech = (getInscription(s) == 2 && isFullyCharged(p));
-            boolean b = false;
+        int ticksInUse = getMaxItemUseDuration(s) - i;
+        boolean fullyCharged = ticksInUse >= 30;
+
+        if (!hasAnyInscription(s) || !fullyCharged || p.isSneaking() || getInscription(s) == 2) {
 
             if (w.isRemote) {
                 MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
-                float mul = Math.min(1.0F + (float) this.ticksInUse / 40.0F, 2.0F);
-
                 if (mop.entityHit != null) {
-                    PacketHandler.INSTANCE.sendToServer(
-                            new PacketKatanaAttack(mop.entityHit, p, this.getAttackDamage(s) * mul, leech));
+                    PacketHandler.INSTANCE.sendToServer(new PacketKatanaAttack(mop.entityHit));
                 }
                 p.swingItem();
+            } else {
+                // 20 ticks to account for network lag
+                EventHandler.ticksInUse.put(p, MutablePair.of(20, ticksInUse));
             }
             p.worldObj.playSoundAtEntity(
                     p,
                     "thaumcraft:swing",
                     0.5F + (float) Math.random(),
                     0.5F + (float) Math.random());
-        } else if (hasAnyInscription(s) && isFullyCharged(p) && !p.isSneaking()) {
+        } else if (hasAnyInscription(s) && fullyCharged && !p.isSneaking()) {
             switch (getInscription(s)) {
                 case 0: {
                     EntityExplosiveOrb proj = new EntityExplosiveOrb(w, p);
@@ -253,13 +254,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
                     break;
             }
         }
-    }
-
-    private boolean isFullyCharged(EntityPlayer p) {
-        float f = Math.min((float) this.ticksInUse / 15.0F, 2.0F);
-
-        if (f == 2.0F) return true;
-        else return false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -421,5 +415,26 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
     @Override
     public int getWarp(ItemStack s, EntityPlayer p) {
         return s.getItemDamage() == 0 ? 0 : s.getItemDamage() == 1 ? 3 : 7;
+    }
+
+    static {
+        FMLCommonHandler.instance().bus().register(new EventHandler());
+    }
+
+    public static class EventHandler {
+
+        public static WeakHashMap<EntityPlayer, MutablePair<Integer, Integer>> ticksInUse = new WeakHashMap<>();
+
+        @SubscribeEvent
+        public void onServerTick(TickEvent.ServerTickEvent e) {
+            if (e.phase == TickEvent.Phase.END) {
+                Iterator<MutablePair<Integer, Integer>> iter = ticksInUse.values().iterator();
+                while (iter.hasNext()) {
+                    MutablePair<Integer, Integer> next = iter.next();
+                    if (next.left > 0) next.left--;
+                    else iter.remove();
+                }
+            }
+        }
     }
 }
