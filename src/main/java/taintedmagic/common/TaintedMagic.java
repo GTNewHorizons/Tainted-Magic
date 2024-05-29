@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -55,11 +56,16 @@ public class TaintedMagic {
     public static final Logger log = LogManager.getLogger("TAINTEDMAGIC");
     public static EnumRarity rarityCreation = EnumHelper.addRarity("CREATION", EnumChatFormatting.GOLD, "Creation");
 
+    public static boolean isBootsActive = false;
+    public static final String BOOTS = "thaumicboots";
+
     // Pre init
     @EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         log.info("Please stand back... Pre-initializing Tainted Magic!");
-
+        if (Loader.isModLoaded(BOOTS)) {
+            isBootsActive = true;
+        }
         // Config
         configHandler.config = new Configuration(event.getSuggestedConfigurationFile());
         configHandler.init();
