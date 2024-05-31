@@ -14,6 +14,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
@@ -24,9 +25,11 @@ import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
+import thaumicboots.api.IBoots;
 
+@Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots")
 public class ItemVoidwalkerBoots extends ItemArmor
-        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor {
+        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots {
 
     public ItemVoidwalkerBoots(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -99,42 +102,107 @@ public class ItemVoidwalkerBoots extends ItemArmor
             s.damageItem(-1, (EntityLivingBase) e);
     }
 
-    public void onArmorTick(World w, EntityPlayer p, ItemStack s) {
-        super.onArmorTick(w, p, s);
-        if ((!w.isRemote) && (s.getItemDamage() > 0) && (p.ticksExisted % 20 == 0)) s.damageItem(-1, p);
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        super.onArmorTick(world, player, itemStack);
+        if ((!world.isRemote) && (itemStack.getItemDamage() > 0) && (player.ticksExisted % 20 == 0))
+            itemStack.damageItem(-1, player);
+        if (getIntertialState(itemStack) && player.moveForward == 0
+                && player.moveStrafing == 0
+                && player.capabilities.isFlying) {
+            player.motionX *= 0.5;
+            player.motionZ *= 0.5;
+        }
+        float bonus = 0.20F;
+        movementEffects(player, bonus, itemStack);
+        if (player.fallDistance > 0.0F) player.fallDistance = 0.0F;
+    }
 
-        if (p.moveForward > 0.0F) {
-            if ((p.worldObj.isRemote) && (!p.isSneaking())) {
-                if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(Integer.valueOf(p.getEntityId()))) {
-                    Thaumcraft.instance.entityEventHandler.prevStep
-                            .put(Integer.valueOf(p.getEntityId()), Float.valueOf(p.stepHeight));
+    public void movementEffects(EntityPlayer player, float bonus, ItemStack itemStack) {
+        if (player.moveForward != 0.0F || player.moveStrafing != 0.0F) {
+            if (TaintedMagic.isBootsActive) {
+                boolean omniMode = isOmniEnabled(itemStack);
+                if ((player.moveForward == 0F && player.moveStrafing == 0F && omniMode)
+                        || (player.moveForward <= 0F && !omniMode)) {
+                    return;
                 }
-                p.stepHeight = 1.0F;
+            }
+            if (player.worldObj.isRemote && !player.isSneaking()) {
+                if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(player.getEntityId())) {
+                    Thaumcraft.instance.entityEventHandler.prevStep.put(player.getEntityId(), player.stepHeight);
+                }
+                player.stepHeight = 1.0F;
             }
 
-            if (p.onGround || p.capabilities.isFlying) {
-                float bonus = 0.20F;
-                p.moveFlying(0.0F, 1.0F, p.capabilities.isFlying ? (bonus - 0.075F) : bonus);
-                p.jumpMovementFactor = 0.00002F;
-            } else if (Hover.getHover(p.getEntityId())) {
-                p.jumpMovementFactor = 0.03F;
+            float speedMod = (float) getSpeedModifier(itemStack);
+            if (player.onGround || player.capabilities.isFlying || player.isOnLadder()) {
+                bonus *= speedMod;
+                if (TaintedMagic.isBootsActive) {
+                    applyOmniState(player, bonus, itemStack);
+                } else if (player.moveForward > 0.0) {
+                    player.moveFlying(
+                            0.0F,
+                            player.moveForward,
+                            player.capabilities.isFlying ? (bonus - 0.075F) : bonus);
+                }
+                player.jumpMovementFactor = 0.00002F;
+            } else if (Hover.getHover(player.getEntityId())) {
+                player.jumpMovementFactor = 0.03F * speedMod;
 
             } else {
-                p.jumpMovementFactor = 0.05F;
+                player.jumpMovementFactor = 0.05F * speedMod;
             }
         }
-        if (p.fallDistance > 0.0F) p.fallDistance = 0.0F;
+    }
+
+    @Optional.Method(modid = "thaumicboots")
+    public void applyOmniState(EntityPlayer player, float bonus, ItemStack itemStack) {
+        if (player.moveForward != 0.0) {
+            player.moveFlying(0.0F, player.moveForward, bonus);
+        }
+        if (player.moveStrafing != 0.0 && getOmniState(itemStack)) {
+            player.moveFlying(player.moveStrafing, 0.0F, bonus);
+        }
     }
 
     @SubscribeEvent
     public void playerJumps(LivingEvent.LivingJumpEvent event) {
         if (event.entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entity;
+            ItemStack boots = player.getCurrentArmor(0);
 
             if (player.inventory.armorItemInSlot(0) != null
                     && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
-                event.entityLiving.motionY += 0.35D;
+                event.entityLiving.motionY += 0.35D * (float) getJumpModifier(boots);
             }
         }
+    }
+
+    // Avoid NSM Exception when ThaumicBoots is not present.
+    public double getSpeedModifier(ItemStack stack) {
+        if (stack.stackTagCompound != null) {
+            return stack.stackTagCompound.getDouble("speed");
+        }
+        return 1.0;
+    }
+
+    public double getJumpModifier(ItemStack stack) {
+        if (stack.stackTagCompound != null) {
+            return stack.stackTagCompound.getDouble("jump");
+        }
+        return 1.0;
+    }
+
+    public boolean getOmniState(ItemStack stack) {
+        if (stack.stackTagCompound != null) {
+            return stack.stackTagCompound.getBoolean("omni");
+        }
+        return false;
+    }
+
+    public boolean getIntertialState(ItemStack stack) {
+        if (stack.stackTagCompound != null) {
+            return stack.stackTagCompound.getBoolean("inertiacanceling");
+        }
+        return false;
     }
 }
