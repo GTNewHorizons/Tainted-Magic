@@ -109,7 +109,7 @@ public class TaintedMagicEventHandler {
         }
 
         NBTTagCompound tagMageMace = stack.stackTagCompound.getCompoundTag("MageMace");
-        tagMageMace.setBoolean("isMageMaceActive", true);
+        tagMageMace.setBoolean("isMageMaceActive", isActive);
         tagMageMace.setInteger("countOfPotency", potency);
 
         // AttributeModifier and damage
