@@ -9,6 +9,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
@@ -92,8 +94,14 @@ public class ItemVoidwalkerBoots extends ItemArmor
         if (source != DamageSource.fall) s.damageItem(dmg, e);
     }
 
-    @Override
-    public void addInformation(ItemStack s, EntityPlayer p, List l, boolean b) {}
+    public void addInformation(ItemStack s, EntityPlayer p, List l, boolean b) {
+        l.add(
+                EnumChatFormatting.DARK_PURPLE + StatCollector.translateToLocal("tc.visdiscount")
+                        + ": "
+                        + getVisDiscount(s, p, null)
+                        + "%");
+        super.addInformation(s, p, l, b);
+    }
 
     public void onUpdate(ItemStack s, World w, Entity e, int j, boolean k) {
         super.onUpdate(s, w, e, j, k);
