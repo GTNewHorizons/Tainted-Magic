@@ -13,8 +13,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ISpecialArmor;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IVisDiscountGear;
@@ -22,8 +25,9 @@ import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.armor.ItemFortressArmor;
 
+@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech") })
 public class ItemShadowFortressArmor extends ItemFortressArmor
-        implements IWarpingGear, IVisDiscountGear, ISpecialArmor {
+        implements IWarpingGear, IVisDiscountGear, ISpecialArmor, IHazardProtector {
 
     public ItemShadowFortressArmor(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -109,5 +113,11 @@ public class ItemShadowFortressArmor extends ItemFortressArmor
 
     public void damageArmor(EntityLivingBase e, ItemStack s, DamageSource source, int dmg, int slot) {
         if (source != DamageSource.fall) s.damageItem(dmg, e);
+    }
+
+    @Override
+    @Optional.Method(modid = "gregtech")
+    public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+        return true;
     }
 }

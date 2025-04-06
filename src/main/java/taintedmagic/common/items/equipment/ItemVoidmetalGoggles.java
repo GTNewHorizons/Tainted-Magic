@@ -9,14 +9,18 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.armor.ItemGoggles;
 
-public class ItemVoidmetalGoggles extends ItemGoggles implements IWarpingGear {
+@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech") })
+public class ItemVoidmetalGoggles extends ItemGoggles implements IWarpingGear, IHazardProtector {
 
     public ItemVoidmetalGoggles(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -57,5 +61,11 @@ public class ItemVoidmetalGoggles extends ItemGoggles implements IWarpingGear {
     public void onArmorTick(World w, EntityPlayer p, ItemStack s) {
         super.onArmorTick(w, p, s);
         if (!w.isRemote && s.getItemDamage() > 0 && p.ticksExisted % 20 == 0) s.damageItem(-1, p);
+    }
+
+    @Override
+    @Optional.Method(modid = "gregtech")
+    public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+        return true;
     }
 }
