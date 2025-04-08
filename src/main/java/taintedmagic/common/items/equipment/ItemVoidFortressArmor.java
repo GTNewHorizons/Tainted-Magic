@@ -12,8 +12,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.IWarpingGear;
@@ -21,7 +24,9 @@ import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.armor.ItemFortressArmor;
 
-public class ItemVoidFortressArmor extends ItemFortressArmor implements IWarpingGear, IVisDiscountGear {
+@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech") })
+public class ItemVoidFortressArmor extends ItemFortressArmor
+        implements IWarpingGear, IVisDiscountGear, IHazardProtector {
 
     public ItemVoidFortressArmor(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -72,5 +77,11 @@ public class ItemVoidFortressArmor extends ItemFortressArmor implements IWarping
     @Override
     public int getVisDiscount(ItemStack s, EntityPlayer p, Aspect a) {
         return 5;
+    }
+
+    @Override
+    @Optional.Method(modid = "gregtech")
+    public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+        return true;
     }
 }

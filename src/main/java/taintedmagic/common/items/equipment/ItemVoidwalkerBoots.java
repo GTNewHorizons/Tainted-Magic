@@ -18,6 +18,8 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import gregtech.api.hazards.Hazard;
+import gregtech.api.hazards.IHazardProtector;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IRepairable;
@@ -29,9 +31,10 @@ import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
 import thaumicboots.api.IBoots;
 
-@Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots")
+@Optional.InterfaceList({ @Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots"),
+        @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech") })
 public class ItemVoidwalkerBoots extends ItemArmor
-        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots {
+        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots, IHazardProtector {
 
     public ItemVoidwalkerBoots(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -212,5 +215,11 @@ public class ItemVoidwalkerBoots extends ItemArmor
             return stack.stackTagCompound.getBoolean("inertiacanceling");
         }
         return false;
+    }
+
+    @Override
+    @Optional.Method(modid = "gregtech")
+    public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
+        return true;
     }
 }
