@@ -24,7 +24,7 @@ import thaumcraft.api.ItemApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.armor.ItemFortressArmor;
 
-@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtechNH") })
+@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech_nh") })
 public class ItemVoidFortressArmor extends ItemFortressArmor
         implements IWarpingGear, IVisDiscountGear, IHazardProtector {
 
@@ -80,7 +80,7 @@ public class ItemVoidFortressArmor extends ItemFortressArmor
     }
 
     @Override
-    @Optional.Method(modid = "gregtechNH")
+    @Optional.Method(modid = "gregtech_nh")
     public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
         return true;
     }
