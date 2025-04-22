@@ -32,7 +32,7 @@ import thaumcraft.common.items.armor.Hover;
 import thaumicboots.api.IBoots;
 
 @Optional.InterfaceList({ @Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots"),
-        @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "dreamcraft") })
+        @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtechNH") })
 public class ItemVoidwalkerBoots extends ItemArmor
         implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots, IHazardProtector {
 
@@ -218,7 +218,7 @@ public class ItemVoidwalkerBoots extends ItemArmor
     }
 
     @Override
-    @Optional.Method(modid = "dreamcraft")
+    @Optional.Method(modid = "gregtechNH")
     public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
         return true;
     }
