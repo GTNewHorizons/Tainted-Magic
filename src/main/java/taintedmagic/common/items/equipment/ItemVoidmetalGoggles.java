@@ -19,7 +19,7 @@ import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.armor.ItemGoggles;
 
-@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech") })
+@Optional.InterfaceList({ @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech_nh") })
 public class ItemVoidmetalGoggles extends ItemGoggles implements IWarpingGear, IHazardProtector {
 
     public ItemVoidmetalGoggles(ArmorMaterial m, int j, int k) {
@@ -64,7 +64,7 @@ public class ItemVoidmetalGoggles extends ItemGoggles implements IWarpingGear, I
     }
 
     @Override
-    @Optional.Method(modid = "gregtech")
+    @Optional.Method(modid = "gregtech_nh")
     public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
         return true;
     }
