@@ -72,7 +72,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Override
@@ -257,62 +257,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
     }
 
     @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onPlayerRender(RenderPlayerEvent.Specials.Post event) {
-        if (event.entityLiving.getActivePotionEffect(Potion.invisibility) != null) return;
-
-        EntityPlayer p = event.entityPlayer;
-
-        for (int i = 0; i < p.inventory.getSizeInventory(); i++) {
-            if (p.inventory.getStackInSlot(i) != null
-                    && p.inventory.getStackInSlot(i).getItem() instanceof ItemKatana) {
-                ItemStack s = p.inventory.getStackInSlot(i);
-
-                GL11.glPushMatrix();
-
-                int light = p.getBrightnessForRender(0);
-                int lightmapX = light % 65536;
-                int lightmapY = light / 65536;
-                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightmapX, lightmapY);
-
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-                GL11.glPushMatrix();
-
-                GL11.glScalef(0.5F, 0.5F, 0.5F);
-                GL11.glRotatef(55, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
-
-                GL11.glTranslatef(-0.6F, 2.25F, 1.25F);
-
-                Minecraft.getMinecraft().renderEngine.bindTexture(getTexture(s));
-                saya.render(0.0625F);
-
-                GL11.glPopMatrix();
-
-                if (p.getHeldItem() == null || p.getHeldItem() != s) {
-                    GL11.glPushMatrix();
-
-                    GL11.glScalef(0.5F, 0.5F, 0.5F);
-                    GL11.glRotatef(55, 1.0F, 0.0F, 0.0F);
-                    GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
-
-                    GL11.glTranslatef(-0.6F, 2.25F, 1.25F);
-
-                    Minecraft.getMinecraft().renderEngine.bindTexture(getTexture(s));
-                    katana.render(0.0625F);
-
-                    GL11.glPopMatrix();
-                }
-
-                GL11.glPopMatrix();
-
-                break;
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
     public static void renderHUD(ScaledResolution r, EntityPlayer p, float pt) {
         Minecraft mc = Minecraft.getMinecraft();
         ItemStack s = mc.thePlayer.getCurrentEquippedItem();
@@ -417,10 +361,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         return s.getItemDamage() == 0 ? 0 : s.getItemDamage() == 1 ? 3 : 7;
     }
 
-    static {
-        FMLCommonHandler.instance().bus().register(new EventHandler());
-    }
-
     public static class EventHandler {
 
         public static WeakHashMap<EntityPlayer, MutablePair<Integer, Integer>> ticksInUse = new WeakHashMap<>();
@@ -433,6 +373,62 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
                     MutablePair<Integer, Integer> next = iter.next();
                     if (next.left > 0) next.left--;
                     else iter.remove();
+                }
+            }
+        }
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onPlayerRender(RenderPlayerEvent.Specials.Post event) {
+            if (event.entityLiving.getActivePotionEffect(Potion.invisibility) != null) return;
+
+            EntityPlayer p = event.entityPlayer;
+
+            for (int i = 0; i < p.inventory.getSizeInventory(); i++) {
+                if (p.inventory.getStackInSlot(i) != null
+                        && p.inventory.getStackInSlot(i).getItem() instanceof ItemKatana) {
+                    ItemStack s = p.inventory.getStackInSlot(i);
+
+                    GL11.glPushMatrix();
+
+                    int light = p.getBrightnessForRender(0);
+                    int lightmapX = light % 65536;
+                    int lightmapY = light / 65536;
+                    OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightmapX, lightmapY);
+
+                    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+                    GL11.glPushMatrix();
+
+                    GL11.glScalef(0.5F, 0.5F, 0.5F);
+                    GL11.glRotatef(55, 1.0F, 0.0F, 0.0F);
+                    GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
+
+                    GL11.glTranslatef(-0.6F, 2.25F, 1.25F);
+
+                    Minecraft.getMinecraft().renderEngine.bindTexture(getTexture(s));
+                    saya.render(0.0625F);
+
+                    GL11.glPopMatrix();
+
+                    if (p.getHeldItem() == null || p.getHeldItem() != s) {
+                        GL11.glPushMatrix();
+
+                        GL11.glScalef(0.5F, 0.5F, 0.5F);
+                        GL11.glRotatef(55, 1.0F, 0.0F, 0.0F);
+                        GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
+
+                        GL11.glTranslatef(-0.6F, 2.25F, 1.25F);
+
+                        Minecraft.getMinecraft().renderEngine.bindTexture(getTexture(s));
+                        katana.render(0.0625F);
+
+                        GL11.glPopMatrix();
+                    }
+
+                    GL11.glPopMatrix();
+
+                    break;
                 }
             }
         }
