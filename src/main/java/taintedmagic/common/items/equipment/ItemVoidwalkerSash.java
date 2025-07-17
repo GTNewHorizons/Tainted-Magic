@@ -138,6 +138,7 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
     }
 
     public class EventHandler {
+
         @SubscribeEvent
         public void onPlayerJump(LivingEvent.LivingJumpEvent event) {
             if ((event.entityLiving instanceof EntityPlayer)) {

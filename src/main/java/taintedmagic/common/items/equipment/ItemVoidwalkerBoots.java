@@ -210,7 +210,8 @@ public class ItemVoidwalkerBoots extends ItemArmor
         return true;
     }
 
-    public class EventHandler{
+    public class EventHandler {
+
         @SubscribeEvent
         public void playerJumps(LivingEvent.LivingJumpEvent event) {
             if (event.entity instanceof EntityPlayer) {

@@ -74,6 +74,7 @@ public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
     }
 
     public class EventHandler {
+
         @SubscribeEvent
         public void useHoe(UseHoeEvent event) {
             if (event.current.getItem() == ItemRegistry.ItemShadowmetalHoe) {
