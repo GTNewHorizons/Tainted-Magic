@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
@@ -23,9 +22,7 @@ public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
         this.setTextureName("taintedmagic:ItemShadowmetalHoe");
         this.setUnlocalizedName("ItemShadowmetalHoe");
-        EventHandler handler = new EventHandler();
-        MinecraftForge.EVENT_BUS.register(handler);
-        FMLCommonHandler.instance().bus().register(handler);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public boolean getIsRepairable(ItemStack s, ItemStack s2) {
@@ -73,7 +70,7 @@ public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
         return EnumRarity.uncommon;
     }
 
-    public class EventHandler {
+    public static class EventHandler {
 
         @SubscribeEvent
         public void useHoe(UseHoeEvent event) {

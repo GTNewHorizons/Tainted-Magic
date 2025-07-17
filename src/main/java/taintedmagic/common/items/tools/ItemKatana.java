@@ -34,6 +34,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -70,8 +71,6 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         this.setUnlocalizedName("ItemKatana");
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
-
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Override
@@ -358,6 +357,12 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
     @Override
     public int getWarp(ItemStack s, EntityPlayer p) {
         return s.getItemDamage() == 0 ? 0 : s.getItemDamage() == 1 ? 3 : 7;
+    }
+
+    static {
+        final EventHandler handler = new EventHandler();
+        FMLCommonHandler.instance().bus().register(handler);
+        MinecraftForge.EVENT_BUS.register(handler);
     }
 
     public static class EventHandler {

@@ -15,7 +15,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.common.lib.PlayerHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IRunicArmor;
@@ -36,9 +35,7 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         this.setMaxStackSize(1);
         this.setUnlocalizedName("ItemVoidwalkerSash");
 
-        EventHandler handler = new EventHandler();
-        MinecraftForge.EVENT_BUS.register(handler);
-        FMLCommonHandler.instance().bus().register(handler);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public EnumRarity getRarity(ItemStack s) {
