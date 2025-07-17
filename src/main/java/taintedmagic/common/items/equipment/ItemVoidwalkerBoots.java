@@ -42,7 +42,7 @@ public class ItemVoidwalkerBoots extends ItemArmor
         this.setUnlocalizedName("ItemVoidwalkerBoots");
         this.setTextureName("taintedmagic:ItemVoidwalkerBoots");
 
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public String getArmorTexture(ItemStack s, Entity e, int slot, String t) {
@@ -175,19 +175,6 @@ public class ItemVoidwalkerBoots extends ItemArmor
         }
     }
 
-    @SubscribeEvent
-    public void playerJumps(LivingEvent.LivingJumpEvent event) {
-        if (event.entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.entity;
-            ItemStack boots = player.getCurrentArmor(0);
-
-            if (player.inventory.armorItemInSlot(0) != null
-                    && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
-                event.entityLiving.motionY += 0.35D * (float) getJumpModifier(boots);
-            }
-        }
-    }
-
     // Avoid NSM Exception when ThaumicBoots is not present.
     public double getSpeedModifier(ItemStack stack) {
         if (stack.stackTagCompound != null) {
@@ -221,5 +208,21 @@ public class ItemVoidwalkerBoots extends ItemArmor
     @Optional.Method(modid = "gregtech_nh")
     public boolean protectsAgainst(ItemStack itemStack, Hazard hazard) {
         return true;
+    }
+
+    public class EventHandler {
+
+        @SubscribeEvent
+        public void playerJumps(LivingEvent.LivingJumpEvent event) {
+            if (event.entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.entity;
+                ItemStack boots = player.getCurrentArmor(0);
+
+                if (player.inventory.armorItemInSlot(0) != null
+                        && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
+                    event.entityLiving.motionY += 0.35D * (float) getJumpModifier(boots);
+                }
+            }
+        }
     }
 }
