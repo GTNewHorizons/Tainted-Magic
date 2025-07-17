@@ -23,8 +23,9 @@ public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
         this.setTextureName("taintedmagic:ItemShadowmetalHoe");
         this.setUnlocalizedName("ItemShadowmetalHoe");
-        MinecraftForge.EVENT_BUS.register(this);
-        FMLCommonHandler.instance().bus().register(this);
+        EventHandler handler = new EventHandler();
+        MinecraftForge.EVENT_BUS.register(handler);
+        FMLCommonHandler.instance().bus().register(handler);
     }
 
     public boolean getIsRepairable(ItemStack s, ItemStack s2) {
@@ -67,15 +68,17 @@ public class ItemShadowmetalHoe extends ItemHoe implements IRepairable {
         return false;
     }
 
-    @SubscribeEvent
-    public void useHoe(UseHoeEvent event) {
-        if (event.current.getItem() == ItemRegistry.ItemShadowmetalHoe) {
-            event.setCanceled(true);
-        }
-    }
-
     @Override
     public EnumRarity getRarity(ItemStack s) {
         return EnumRarity.uncommon;
+    }
+
+    public class EventHandler {
+        @SubscribeEvent
+        public void useHoe(UseHoeEvent event) {
+            if (event.current.getItem() == ItemRegistry.ItemShadowmetalHoe) {
+                event.setCanceled(true);
+            }
+        }
     }
 }
