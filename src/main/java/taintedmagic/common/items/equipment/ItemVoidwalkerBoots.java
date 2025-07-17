@@ -160,10 +160,10 @@ public class ItemVoidwalkerBoots extends ItemArmor
                 }
                 player.jumpMovementFactor = 0.00002F;
             } else if (Hover.getHover(player.getEntityId())) {
-                player.jumpMovementFactor = 0.03F * speedMod;
+                player.jumpMovementFactor = 0.03F;
 
             } else {
-                player.jumpMovementFactor = 0.05F * speedMod;
+                player.jumpMovementFactor = 0.05F;
             }
         }
     }
