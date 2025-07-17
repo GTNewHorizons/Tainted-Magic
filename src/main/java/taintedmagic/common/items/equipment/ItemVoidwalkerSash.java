@@ -36,8 +36,9 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         this.setMaxStackSize(1);
         this.setUnlocalizedName("ItemVoidwalkerSash");
 
-        MinecraftForge.EVENT_BUS.register(this);
-        FMLCommonHandler.instance().bus().register(this);
+        EventHandler handler = new EventHandler();
+        MinecraftForge.EVENT_BUS.register(handler);
+        FMLCommonHandler.instance().bus().register(handler);
     }
 
     public EnumRarity getRarity(ItemStack s) {
@@ -117,22 +118,6 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerJump(LivingEvent.LivingJumpEvent event) {
-        if ((event.entityLiving instanceof EntityPlayer)) {
-            EntityPlayer player = (EntityPlayer) event.entityLiving;
-            ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
-            ItemStack boots = player.inventory.armorItemInSlot(0);
-            if ((sash != null) && ((sash.getItem() instanceof ItemVoidwalkerSash))) {
-                if ((boots != null) && ((boots.getItem() instanceof ItemVoidwalkerBoots))) {
-                    if (hasSpeedBoost(sash)) {
-                        player.motionY += 0.15F;
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public ItemStack onItemRightClick(ItemStack s, World w, EntityPlayer p) {
         if (!w.isRemote && p.isSneaking()) {
@@ -150,5 +135,23 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         if (s.stackTagCompound == null) return true;
 
         else return s.stackTagCompound.getBoolean(TAG_MODE);
+    }
+
+    public class EventHandler {
+        @SubscribeEvent
+        public void onPlayerJump(LivingEvent.LivingJumpEvent event) {
+            if ((event.entityLiving instanceof EntityPlayer)) {
+                EntityPlayer player = (EntityPlayer) event.entityLiving;
+                ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
+                ItemStack boots = player.inventory.armorItemInSlot(0);
+                if ((sash != null) && ((sash.getItem() instanceof ItemVoidwalkerSash))) {
+                    if ((boots != null) && ((boots.getItem() instanceof ItemVoidwalkerBoots))) {
+                        if (hasSpeedBoost(sash)) {
+                            player.motionY += 0.15F;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
