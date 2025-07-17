@@ -2,6 +2,7 @@ package taintedmagic.common.items.equipment;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import gregtech.api.hazards.Hazard;
@@ -129,11 +131,10 @@ public class ItemVoidwalkerBoots extends ItemArmor
     }
 
     public void movementEffects(EntityPlayer player, float bonus, ItemStack itemStack) {
-        if (player.moveForward != 0.0F || player.moveStrafing != 0.0F) {
+        if (player.moveForward != 0.0F || player.moveStrafing != 0.0F || player.motionY != 0.0F) {
             if (TaintedMagic.isBootsActive) {
                 boolean omniMode = isOmniEnabled(itemStack);
-                if ((player.moveForward == 0F && player.moveStrafing == 0F && omniMode)
-                        || (player.moveForward <= 0F && !omniMode)) {
+                if (player.moveForward <= 0F && !omniMode) {
                     return;
                 }
             }
@@ -146,6 +147,8 @@ public class ItemVoidwalkerBoots extends ItemArmor
 
             float speedMod = (float) getSpeedModifier(itemStack);
             if (player.onGround || player.capabilities.isFlying || player.isOnLadder()) {
+
+                bonus += sashBuff(player);
                 bonus *= speedMod;
                 if (TaintedMagic.isBootsActive) {
                     applyOmniState(player, bonus, itemStack);
@@ -165,25 +168,55 @@ public class ItemVoidwalkerBoots extends ItemArmor
         }
     }
 
+    public float sashBuff(final EntityPlayer player) {
+        final ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
+        if (sash != null && sash.getItem() == ItemRegistry.ItemVoidwalkerSash && sashHasSpeedBoost(sash)) {
+            return 0.4F; //sash speed buff
+        }
+        return 0.0F;
+    }
+    public boolean sashHasSpeedBoost(ItemStack s) {
+        if (s.stackTagCompound == null) return true;
+
+        else return s.stackTagCompound.getBoolean("mode");
+    }
+
     @Optional.Method(modid = "thaumicboots")
     public void applyOmniState(EntityPlayer player, float bonus, ItemStack itemStack) {
         if (player.moveForward != 0.0) {
             player.moveFlying(0.0F, player.moveForward, bonus);
         }
-        if (player.moveStrafing != 0.0 && getOmniState(itemStack)) {
-            player.moveFlying(player.moveStrafing, 0.0F, bonus);
+        if (getOmniState(itemStack)) {
+            if (player.moveStrafing != 0.0) {
+                player.moveFlying(player.moveStrafing, 0.0F, bonus);
+            }
+            boolean jumping = Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed();
+            boolean sneaking = player.isSneaking();
+            float rise = Math.abs((float) player.motionY);
+            if (sneaking && !jumping && !player.onGround) { //no moveFlying for vertical so this extracts the internals
+                rise *= bonus / rise;
+                player.motionY -= rise;
+            }
+            if (!sneaking && jumping) {
+                rise *= bonus / rise;
+                player.motionY += rise;
+            }
         }
     }
 
     @SubscribeEvent
     public void playerJumps(LivingEvent.LivingJumpEvent event) {
-        if (event.entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.entity;
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             ItemStack boots = player.getCurrentArmor(0);
+            ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
 
             if (player.inventory.armorItemInSlot(0) != null
                     && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
-                event.entityLiving.motionY += 0.35D * (float) getJumpModifier(boots);
+                player.motionY += 0.35D * (float) getJumpModifier(boots);
+                if ((sash != null) && sash.getItem() == ItemRegistry.ItemVoidwalkerSash && sashHasSpeedBoost(sash)){
+                    player.motionY += 0.15F * (float) getJumpModifier(boots);
+                }
             }
         }
     }
