@@ -9,12 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import cpw.mods.fml.common.FMLCommonHandler;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IWarpingGear;
@@ -33,9 +30,6 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         this.setMaxDamage(-1);
         this.setMaxStackSize(1);
         this.setUnlocalizedName("ItemVoidwalkerSash");
-
-        MinecraftForge.EVENT_BUS.register(this);
-        FMLCommonHandler.instance().bus().register(this);
     }
 
     public EnumRarity getRarity(ItemStack s) {
@@ -107,4 +101,5 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
 
         else return s.stackTagCompound.getBoolean(TAG_MODE);
     }
+
 }
