@@ -171,10 +171,11 @@ public class ItemVoidwalkerBoots extends ItemArmor
     public float sashBuff(final EntityPlayer player) {
         final ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
         if (sash != null && sash.getItem() == ItemRegistry.ItemVoidwalkerSash && sashHasSpeedBoost(sash)) {
-            return 0.4F; //sash speed buff
+            return 0.4F; // sash speed buff
         }
         return 0.0F;
     }
+
     public boolean sashHasSpeedBoost(ItemStack s) {
         if (s.stackTagCompound == null) return true;
 
@@ -192,14 +193,10 @@ public class ItemVoidwalkerBoots extends ItemArmor
             }
             boolean jumping = Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed();
             boolean sneaking = player.isSneaking();
-            float rise = Math.abs((float) player.motionY);
-            if (sneaking && !jumping && !player.onGround) { //no moveFlying for vertical so this extracts the internals
-                rise *= bonus / rise;
-                player.motionY -= rise;
-            }
-            if (!sneaking && jumping) {
-                rise *= bonus / rise;
-                player.motionY += rise;
+            if (sneaking && !jumping && !player.onGround) {
+                player.motionY -= bonus;
+            } else if (jumping && !sneaking) {
+                player.motionY += bonus;
             }
         }
     }
@@ -240,6 +237,7 @@ public class ItemVoidwalkerBoots extends ItemArmor
     }
 
     public class EventHandler {
+
         @SubscribeEvent
         public void playerJumps(LivingEvent.LivingJumpEvent event) {
             if (event.entityLiving instanceof EntityPlayer) {
@@ -250,7 +248,8 @@ public class ItemVoidwalkerBoots extends ItemArmor
                 if (player.inventory.armorItemInSlot(0) != null
                         && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
                     player.motionY += 0.35D * (float) getJumpModifier(boots);
-                    if ((sash != null) && sash.getItem() == ItemRegistry.ItemVoidwalkerSash && sashHasSpeedBoost(sash)){
+                    if ((sash != null) && sash.getItem() == ItemRegistry.ItemVoidwalkerSash
+                            && sashHasSpeedBoost(sash)) {
                         player.motionY += 0.15F * (float) getJumpModifier(boots);
                     }
                 }

@@ -17,7 +17,6 @@ import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.ItemRunic;
 import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.items.armor.Hover;
 
 public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpingGear, IBauble {
 
