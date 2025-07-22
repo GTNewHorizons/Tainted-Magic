@@ -95,7 +95,7 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         return s;
     }
 
-    public boolean hasSpeedBoost(ItemStack s) {
+    public static boolean hasSpeedBoost(ItemStack s) {
         if (s.stackTagCompound == null) return true;
 
         else return s.stackTagCompound.getBoolean(TAG_MODE);
