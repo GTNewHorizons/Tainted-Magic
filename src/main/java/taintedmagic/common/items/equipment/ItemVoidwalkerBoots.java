@@ -179,7 +179,7 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
         }
         for (ItemStack stack : PlayerHandler.getPlayerBaubles(player).stackList) {
             if (stack != null && stack.getItem() == ItemRegistry.ItemVoidwalkerSash
-                    && (stack.stackTagCompound != null && stack.stackTagCompound.getBoolean("mode"))) {
+                    && (ItemVoidwalkerSash.hasSpeedBoost(stack))) {
                 return 0.4F;
             }
         }
