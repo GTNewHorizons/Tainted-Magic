@@ -22,6 +22,7 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import gregtech.api.hazards.Hazard;
 import gregtech.api.hazards.IHazardProtector;
+import taintedmagic.api.IVoidwalker;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IRepairable;
@@ -33,10 +34,12 @@ import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
 import thaumicboots.api.IBoots;
 
+// import static taintedmagic.common.items.equipment.ItemVoidwalkerSash.sashBuff;
+
 @Optional.InterfaceList({ @Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots"),
         @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech_nh") })
-public class ItemVoidwalkerBoots extends ItemArmor
-        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots, IHazardProtector {
+public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisDiscountGear, IWarpingGear, IRunicArmor,
+        IRepairable, ISpecialArmor, IBoots, IHazardProtector {
 
     public ItemVoidwalkerBoots(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -168,18 +171,18 @@ public class ItemVoidwalkerBoots extends ItemArmor
         }
     }
 
-    public float sashBuff(final EntityPlayer player) {
-        final ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
-        if (sash != null && sash.getItem() == ItemRegistry.ItemVoidwalkerSash && sashHasSpeedBoost(sash)) {
-            return 0.4F; // sash speed buff
+    public static float sashBuff(final EntityPlayer player) {
+        // speed & jump buff should only apply when sash+voidwalkers are worn together
+        ItemStack boots = player.getCurrentArmor(0);
+        if (boots != null && boots.getItem() instanceof IVoidwalker) {
+            for (ItemStack stack : PlayerHandler.getPlayerBaubles(player).stackList) {
+                if (stack != null && stack.getItem() == ItemRegistry.ItemVoidwalkerSash
+                        && (stack.stackTagCompound != null && stack.stackTagCompound.getBoolean("mode"))) {
+                    return 0.4F;
+                }
+            }
         }
         return 0.0F;
-    }
-
-    public boolean sashHasSpeedBoost(ItemStack s) {
-        if (s.stackTagCompound == null) return true;
-
-        else return s.stackTagCompound.getBoolean("mode");
     }
 
     @Optional.Method(modid = "thaumicboots")
@@ -243,13 +246,11 @@ public class ItemVoidwalkerBoots extends ItemArmor
             if (event.entityLiving instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 ItemStack boots = player.getCurrentArmor(0);
-                ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
 
                 if (player.inventory.armorItemInSlot(0) != null
                         && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
                     player.motionY += 0.35D * (float) getJumpModifier(boots);
-                    if ((sash != null) && sash.getItem() == ItemRegistry.ItemVoidwalkerSash
-                            && sashHasSpeedBoost(sash)) {
+                    if (sashBuff(player) > 0F) {
                         player.motionY += 0.15F * (float) getJumpModifier(boots);
                     }
                 }
