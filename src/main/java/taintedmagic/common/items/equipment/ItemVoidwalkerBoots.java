@@ -174,12 +174,13 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
     public static float sashBuff(final EntityPlayer player) {
         // speed & jump buff should only apply when sash+voidwalkers are worn together
         ItemStack boots = player.getCurrentArmor(0);
-        if (boots != null && boots.getItem() instanceof IVoidwalker) {
-            for (ItemStack stack : PlayerHandler.getPlayerBaubles(player).stackList) {
-                if (stack != null && stack.getItem() == ItemRegistry.ItemVoidwalkerSash
-                        && (stack.stackTagCompound != null && stack.stackTagCompound.getBoolean("mode"))) {
-                    return 0.4F;
-                }
+        if (boots == null || !(boots.getItem() instanceof IVoidwalker)) {
+            return 0.0F;
+        }
+        for (ItemStack stack : PlayerHandler.getPlayerBaubles(player).stackList) {
+            if (stack != null && stack.getItem() == ItemRegistry.ItemVoidwalkerSash
+                    && (stack.stackTagCompound != null && stack.stackTagCompound.getBoolean("mode"))) {
+                return 0.4F;
             }
         }
         return 0.0F;
