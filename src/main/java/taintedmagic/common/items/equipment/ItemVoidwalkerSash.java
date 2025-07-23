@@ -9,19 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import baubles.common.lib.PlayerHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.ItemRunic;
 import thaumcraft.common.Thaumcraft;
-import thaumcraft.common.items.armor.Hover;
 
 public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpingGear, IBauble {
 
@@ -34,8 +29,6 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         this.setMaxDamage(-1);
         this.setMaxStackSize(1);
         this.setUnlocalizedName("ItemVoidwalkerSash");
-
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public EnumRarity getRarity(ItemStack s) {
@@ -86,33 +79,7 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
 
     @Override
     public void onWornTick(ItemStack s, EntityLivingBase e) {
-        EntityPlayer p = (EntityPlayer) e;
-        if ((p.inventory.armorItemInSlot(0) != null)
-                && (p.inventory.armorItemInSlot(0).getItem() instanceof ItemVoidwalkerBoots)) {
-            if (hasSpeedBoost(s)) {
-                if (p.moveForward > 0.0F) {
-                    if ((p.worldObj.isRemote) && (!p.isSneaking())) {
-                        if (!Thaumcraft.instance.entityEventHandler.prevStep
-                                .containsKey(Integer.valueOf(p.getEntityId()))) {
-                            Thaumcraft.instance.entityEventHandler.prevStep
-                                    .put(Integer.valueOf(p.getEntityId()), Float.valueOf(p.stepHeight));
-                        }
-                        p.stepHeight = 1.0F;
-                    }
-
-                    if (p.onGround || p.capabilities.isFlying) {
-                        float bonus = 0.4F;
-                        p.moveFlying(0.0F, 1.0F, p.capabilities.isFlying ? (bonus - 0.050F) : bonus);
-                    } else if (Hover.getHover(p.getEntityId())) {
-                        p.jumpMovementFactor = 0.015F;
-
-                    } else {
-                        p.jumpMovementFactor = 0.025F;
-                    }
-                }
-                if (p.fallDistance > 0.0F) p.fallDistance = 0.0F;
-            }
-        }
+        // functionality moved to voidwalker boots
     }
 
     @Override
@@ -128,28 +95,10 @@ public class ItemVoidwalkerSash extends ItemRunic implements IRunicArmor, IWarpi
         return s;
     }
 
-    public boolean hasSpeedBoost(ItemStack s) {
+    public static boolean hasSpeedBoost(ItemStack s) {
         if (s.stackTagCompound == null) return true;
 
         else return s.stackTagCompound.getBoolean(TAG_MODE);
     }
 
-    public class EventHandler {
-
-        @SubscribeEvent
-        public void onPlayerJump(LivingEvent.LivingJumpEvent event) {
-            if ((event.entityLiving instanceof EntityPlayer)) {
-                EntityPlayer player = (EntityPlayer) event.entityLiving;
-                ItemStack sash = PlayerHandler.getPlayerBaubles(player).getStackInSlot(3);
-                ItemStack boots = player.inventory.armorItemInSlot(0);
-                if ((sash != null) && ((sash.getItem() instanceof ItemVoidwalkerSash))) {
-                    if ((boots != null) && ((boots.getItem() instanceof ItemVoidwalkerBoots))) {
-                        if (hasSpeedBoost(sash)) {
-                            player.motionY += 0.15F;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

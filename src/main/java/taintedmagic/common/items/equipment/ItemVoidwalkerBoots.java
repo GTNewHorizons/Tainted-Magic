@@ -2,6 +2,7 @@ package taintedmagic.common.items.equipment;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +17,12 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import baubles.common.lib.PlayerHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import gregtech.api.hazards.Hazard;
 import gregtech.api.hazards.IHazardProtector;
+import taintedmagic.api.IVoidwalker;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
 import thaumcraft.api.IRepairable;
@@ -31,10 +34,12 @@ import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
 import thaumicboots.api.IBoots;
 
+// import static taintedmagic.common.items.equipment.ItemVoidwalkerSash.sashBuff;
+
 @Optional.InterfaceList({ @Optional.Interface(iface = "thaumicboots.api.IBoots", modid = "thaumicboots"),
         @Optional.Interface(iface = "gregtech.api.hazards.IHazardProtector", modid = "gregtech_nh") })
-public class ItemVoidwalkerBoots extends ItemArmor
-        implements IVisDiscountGear, IWarpingGear, IRunicArmor, IRepairable, ISpecialArmor, IBoots, IHazardProtector {
+public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisDiscountGear, IWarpingGear, IRunicArmor,
+        IRepairable, ISpecialArmor, IBoots, IHazardProtector {
 
     public ItemVoidwalkerBoots(ArmorMaterial m, int j, int k) {
         super(m, j, k);
@@ -129,11 +134,10 @@ public class ItemVoidwalkerBoots extends ItemArmor
     }
 
     public void movementEffects(EntityPlayer player, float bonus, ItemStack itemStack) {
-        if (player.moveForward != 0.0F || player.moveStrafing != 0.0F) {
+        if (player.moveForward != 0.0F || player.moveStrafing != 0.0F || player.motionY != 0.0F) {
             if (TaintedMagic.isBootsActive) {
                 boolean omniMode = isOmniEnabled(itemStack);
-                if ((player.moveForward == 0F && player.moveStrafing == 0F && omniMode)
-                        || (player.moveForward <= 0F && !omniMode)) {
+                if (player.moveForward <= 0F && !omniMode) {
                     return;
                 }
             }
@@ -146,6 +150,8 @@ public class ItemVoidwalkerBoots extends ItemArmor
 
             float speedMod = (float) getSpeedModifier(itemStack);
             if (player.onGround || player.capabilities.isFlying || player.isOnLadder()) {
+
+                bonus += sashBuff(player);
                 bonus *= speedMod;
                 if (TaintedMagic.isBootsActive) {
                     applyOmniState(player, bonus, itemStack);
@@ -157,12 +163,27 @@ public class ItemVoidwalkerBoots extends ItemArmor
                 }
                 player.jumpMovementFactor = 0.00002F;
             } else if (Hover.getHover(player.getEntityId())) {
-                player.jumpMovementFactor = 0.03F * speedMod;
+                player.jumpMovementFactor = 0.03F;
 
             } else {
-                player.jumpMovementFactor = 0.05F * speedMod;
+                player.jumpMovementFactor = 0.05F;
             }
         }
+    }
+
+    public static float sashBuff(final EntityPlayer player) {
+        // speed & jump buff should only apply when sash+voidwalkers are worn together
+        ItemStack boots = player.getCurrentArmor(0);
+        if (boots == null || !(boots.getItem() instanceof IVoidwalker)) {
+            return 0.0F;
+        }
+        for (ItemStack stack : PlayerHandler.getPlayerBaubles(player).stackList) {
+            if (stack != null && stack.getItem() == ItemRegistry.ItemVoidwalkerSash
+                    && (ItemVoidwalkerSash.hasSpeedBoost(stack))) {
+                return 0.4F;
+            }
+        }
+        return 0.0F;
     }
 
     @Optional.Method(modid = "thaumicboots")
@@ -170,8 +191,17 @@ public class ItemVoidwalkerBoots extends ItemArmor
         if (player.moveForward != 0.0) {
             player.moveFlying(0.0F, player.moveForward, bonus);
         }
-        if (player.moveStrafing != 0.0 && getOmniState(itemStack)) {
-            player.moveFlying(player.moveStrafing, 0.0F, bonus);
+        if (getOmniState(itemStack)) {
+            if (player.moveStrafing != 0.0) {
+                player.moveFlying(player.moveStrafing, 0.0F, bonus);
+            }
+            boolean jumping = Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed();
+            boolean sneaking = player.isSneaking();
+            if (sneaking && !jumping && !player.onGround) {
+                player.motionY -= bonus;
+            } else if (jumping && !sneaking) {
+                player.motionY += bonus;
+            }
         }
     }
 
@@ -214,13 +244,16 @@ public class ItemVoidwalkerBoots extends ItemArmor
 
         @SubscribeEvent
         public void playerJumps(LivingEvent.LivingJumpEvent event) {
-            if (event.entity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) event.entity;
+            if (event.entityLiving instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.entityLiving;
                 ItemStack boots = player.getCurrentArmor(0);
 
                 if (player.inventory.armorItemInSlot(0) != null
                         && player.inventory.armorItemInSlot(0).getItem() == ItemRegistry.ItemVoidwalkerBoots) {
-                    event.entityLiving.motionY += 0.35D * (float) getJumpModifier(boots);
+                    player.motionY += 0.35D * (float) getJumpModifier(boots);
+                    if (sashBuff(player) > 0F) {
+                        player.motionY += 0.15F * (float) getJumpModifier(boots);
+                    }
                 }
             }
         }
