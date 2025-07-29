@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "package": "taintedmagic.mixins",
+  "refmap": "mixins.TaintedMagic.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "early.minecraft.EntityLivingBaseAccessor"
+  ]
+}
