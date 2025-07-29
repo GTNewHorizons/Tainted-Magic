@@ -2,7 +2,6 @@ package taintedmagic.common.items.equipment;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +32,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.armor.Hover;
 import thaumicboots.api.IBoots;
+import thaumicboots.mixins.early.minecraft.EntityLivingBaseAccessor;
 
 // import static taintedmagic.common.items.equipment.ItemVoidwalkerSash.sashBuff;
 
@@ -195,7 +195,7 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
             if (player.moveStrafing != 0.0) {
                 player.moveFlying(player.moveStrafing, 0.0F, bonus);
             }
-            boolean jumping = Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed();
+            boolean jumping = ((EntityLivingBaseAccessor) player).getIsJumping();
             boolean sneaking = player.isSneaking();
             if (sneaking && !jumping && !player.onGround) {
                 player.motionY -= bonus;
