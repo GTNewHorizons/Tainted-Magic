@@ -25,7 +25,6 @@ import gregtech.api.hazards.IHazardProtector;
 import taintedmagic.api.IVoidwalker;
 import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.registry.ItemRegistry;
-import taintedmagic.mixins.early.minecraft.EntityLivingBaseAccessor;
 import thaumcraft.api.IRepairable;
 import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IVisDiscountGear;
@@ -196,7 +195,7 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
             if (player.moveStrafing != 0.0) {
                 player.moveFlying(player.moveStrafing, 0.0F, bonus);
             }
-            boolean jumping = ((EntityLivingBaseAccessor) player).getIsJumping();
+            boolean jumping = Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed();
             boolean sneaking = player.isSneaking();
             if (sneaking && !jumping && !player.onGround) {
                 player.motionY -= bonus;
