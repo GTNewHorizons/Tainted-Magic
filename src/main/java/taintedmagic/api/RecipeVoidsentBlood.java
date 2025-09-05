@@ -1,6 +1,7 @@
 package taintedmagic.api;
 
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,9 +13,18 @@ import thaumcraft.common.items.armor.ItemCultistPlateArmor;
 import thaumcraft.common.items.armor.ItemCultistRobeArmor;
 
 /**
- * Custom recipe for aplpying Voidsent Blood to Cult Attire
+ * Custom recipe for applying Voidsent Blood to Cult Attire
  */
 public class RecipeVoidsentBlood implements IRecipe {
+
+    private boolean isValidArmor(Item item) {
+        return item instanceof ItemCultistRobeArmor || item instanceof ItemCultistPlateArmor
+                || item instanceof ItemCultistLeaderArmor;
+    }
+
+    private boolean isValidBlood(Item item) {
+        return item instanceof ItemVoidsentBlood;
+    }
 
     @Override
     public boolean matches(InventoryCrafting inv, World w) {
@@ -22,17 +32,19 @@ public class RecipeVoidsentBlood implements IRecipe {
         boolean foundArmor = false;
 
         for (int i = 0; i < inv.getSizeInventory(); i++) {
-            ItemStack s = inv.getStackInSlot(i);
+            ItemStack itemStack = inv.getStackInSlot(i);
 
-            if (s != null) {
-                if (s.getItem() instanceof ItemVoidsentBlood && !foundBlood) foundBlood = true;
-                else if ((s.getItem() instanceof ItemCultistRobeArmor || s.getItem() instanceof ItemCultistPlateArmor
-                        || s.getItem() instanceof ItemCultistLeaderArmor) && !foundArmor)
-                    foundArmor = true;
+            if (itemStack == null) continue;
 
-                else return false;
+            if (isValidBlood(itemStack.getItem()) && !foundBlood) {
+                foundBlood = true;
+            } else if (isValidArmor(itemStack.getItem()) && !foundArmor) {
+                foundArmor = true;
+            } else {
+                return false;
             }
         }
+
         return foundBlood && foundArmor;
     }
 
@@ -42,21 +54,30 @@ public class RecipeVoidsentBlood implements IRecipe {
         ItemStack armor = null;
         ItemStack blood = null;
 
+        // First, find the required ingredients in the crafting grid.
         for (int i = 0; i < inv.getSizeInventory(); i++) {
-            if (inv.getStackInSlot(i) != null && (inv.getStackInSlot(i).getItem() instanceof ItemCultistRobeArmor
-                    || inv.getStackInSlot(i).getItem() instanceof ItemCultistPlateArmor
-                    || inv.getStackInSlot(i).getItem() instanceof ItemCultistLeaderArmor))
-                armor = inv.getStackInSlot(i);
-            else if (inv.getStackInSlot(i) != null && inv.getStackInSlot(i).getItem() instanceof ItemVoidsentBlood)
-                blood = inv.getStackInSlot(i);
+            ItemStack itemStack = inv.getStackInSlot(i);
+
+            if (itemStack == null) continue;
+
+            if (isValidArmor(itemStack.getItem())) {
+                armor = itemStack;
+            } else if (isValidBlood(itemStack.getItem())) {
+                blood = itemStack;
+            }
         }
+
+        // Check that both items exist and that the armor is not already voidtouched.
         if (armor != null && blood != null
-                && (armor.getTagCompound() == null
-                        || (armor.getTagCompound() != null && !armor.getTagCompound().getBoolean("voidtouched")))) {
+                && !(armor.hasTagCompound() && armor.getTagCompound().getBoolean("voidtouched"))) {
             copy = armor.copy();
-            if (copy.getTagCompound() == null) copy.setTagCompound(new NBTTagCompound());
-            if (copy.getTagCompound() != null) copy.getTagCompound().setBoolean("voidtouched", true);
+
+            NBTTagCompound nbt = copy.hasTagCompound() ? copy.getTagCompound() : new NBTTagCompound();
+
+            nbt.setBoolean("voidtouched", true);
+            copy.setTagCompound(nbt);
         }
+
         return copy;
     }
 
