@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import taintedmagic.common.items.ItemVoidsentBlood;
+import thaumcraft.common.items.armor.ItemCultistBoots;
 import thaumcraft.common.items.armor.ItemCultistLeaderArmor;
 import thaumcraft.common.items.armor.ItemCultistPlateArmor;
 import thaumcraft.common.items.armor.ItemCultistRobeArmor;
@@ -19,7 +20,8 @@ public class RecipeVoidsentBlood implements IRecipe {
 
     private boolean isValidArmor(Item item) {
         return item instanceof ItemCultistRobeArmor || item instanceof ItemCultistPlateArmor
-                || item instanceof ItemCultistLeaderArmor;
+                || item instanceof ItemCultistLeaderArmor
+                || item instanceof ItemCultistBoots;
     }
 
     private boolean isValidBlood(Item item) {
