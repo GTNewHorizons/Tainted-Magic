@@ -163,10 +163,10 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
                 }
                 player.jumpMovementFactor = 0.00002F;
             } else if (Hover.getHover(player.getEntityId())) {
-                player.jumpMovementFactor = 0.03F;
+                player.jumpMovementFactor = (0.03F / 0.275F * 0.35F - 0.02F) * speedMod + 0.02F;
 
             } else {
-                player.jumpMovementFactor = 0.05F;
+                player.jumpMovementFactor = (0.05F / 0.275F * 0.35F - 0.02F) * speedMod + 0.02F;
             }
         }
     }
