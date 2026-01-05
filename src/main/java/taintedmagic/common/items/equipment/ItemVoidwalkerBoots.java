@@ -119,10 +119,9 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
     }
 
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        super.onArmorTick(world, player, itemStack);
         if ((!world.isRemote) && (itemStack.getItemDamage() > 0) && (player.ticksExisted % 20 == 0))
             itemStack.damageItem(-1, player);
-        if (getIntertialState(itemStack) && player.moveForward == 0
+        if (getInertiaState(itemStack) && player.moveForward == 0
                 && player.moveStrafing == 0
                 && player.capabilities.isFlying) {
             player.motionX *= 0.5;
@@ -136,12 +135,12 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
     public void movementEffects(EntityPlayer player, float bonus, ItemStack itemStack) {
         if (player.moveForward != 0.0F || player.moveStrafing != 0.0F || player.motionY != 0.0F) {
             if (TaintedMagic.isBootsActive) {
-                boolean omniMode = isOmniEnabled(itemStack);
+                boolean omniMode = getOmniState(itemStack);
                 if (player.moveForward <= 0F && !omniMode) {
                     return;
                 }
             }
-            if (player.worldObj.isRemote && !player.isSneaking()) {
+            if (player.worldObj.isRemote && !player.isSneaking() && getStepAssistState(itemStack)) {
                 if (!Thaumcraft.instance.entityEventHandler.prevStep.containsKey(player.getEntityId())) {
                     Thaumcraft.instance.entityEventHandler.prevStep.put(player.getEntityId(), player.stepHeight);
                 }
@@ -221,13 +220,20 @@ public class ItemVoidwalkerBoots extends ItemArmor implements IVoidwalker, IVisD
     }
 
     public boolean getOmniState(ItemStack stack) {
-        if (stack.stackTagCompound != null) {
+        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("omni")) {
             return stack.stackTagCompound.getBoolean("omni");
         }
-        return false;
+        return true;
     }
 
-    public boolean getIntertialState(ItemStack stack) {
+    public boolean getStepAssistState(ItemStack stack) {
+        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("step")) {
+            return stack.stackTagCompound.getBoolean("step");
+        }
+        return true;
+    }
+
+    public boolean getInertiaState(ItemStack stack) {
         if (stack.stackTagCompound != null) {
             return stack.stackTagCompound.getBoolean("inertiacanceling");
         }
