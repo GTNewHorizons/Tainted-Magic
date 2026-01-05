@@ -22,7 +22,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import taintedmagic.api.IBloodlust;
 import taintedmagic.common.helper.TaintedMagicHelper;
@@ -151,11 +150,6 @@ public class TaintedMagicEventHandler {
         }
     }
     // End
-
-    @SubscribeEvent
-    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (UpdateHandler.show) event.player.addChatMessage(new ChatComponentText(UpdateHandler.updateStatus));
-    }
 
     @SubscribeEvent
     public void onCrafting(ItemCraftedEvent event) {

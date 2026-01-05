@@ -20,7 +20,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import taintedmagic.common.handler.ConfigHandler;
 import taintedmagic.common.handler.TaintedMagicEventHandler;
-import taintedmagic.common.handler.UpdateHandler;
 import taintedmagic.common.lib.LibCreativeTab;
 import taintedmagic.common.lib.LibStrings;
 import taintedmagic.common.network.PacketHandler;
@@ -79,8 +78,6 @@ public class TaintedMagic {
         RecipeRegistry.init();
 
         OreDictionaryRegistry.init();
-
-        if (configHandler.useUpdateHandler) UpdateHandler.init();
     }
 
     // Init
