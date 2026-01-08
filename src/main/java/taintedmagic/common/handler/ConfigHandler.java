@@ -8,7 +8,6 @@ public class ConfigHandler {
 
     public static Configuration config;
 
-    public static boolean useUpdateHandler = true;
     public static boolean researchTags = true;
     public static boolean useCustomResearchTabBackground = false;
     public static int magesMaceBaseDamage;
@@ -28,8 +27,6 @@ public class ConfigHandler {
 
         config.load();
 
-        useUpdateHandler = config
-                .getBoolean("use_update_handler", "misc", true, "Should update notifications be enabled?");
         researchTags = config.getBoolean(
                 "research_tags",
                 "research",
