@@ -146,7 +146,7 @@ tc.research_category.TM=Maleficia
 
 tm.name.TAINTEDMAGIC=A Disturbing Find
 tm.tag.TAINTEDMAGIC=I'm scared
-tm.text.TAINTEDMAGIC.1=While you were out and about gathering magical knowledge, you came across something rather disturbing - a blood-stained, ripped page from another Thaumaturge’s Thaumonomicon. From your understanding, it gives an idea for a darker side of magic...<BR>The darkness intrigues you, even though it ensures a dangerous path. But what have you got to lose? The thought of an adventure into the unknown excites you!<BR>The page is still rendered unclear, you could only make out bits and pieces... But one day, you will decipher this page and have a newfound mastery...one day!
+tm.text.TAINTEDMAGIC.1=While you were out and about gathering magical knowledge, you came across something rather disturbing - a ripped, blood-stained page from another Thaumaturge’s Thaumonomicon. From your understanding, it gives an idea for a darker side of magic...<BR>The darkness intrigues you, even though it ensures a dangerous path. But what have you got to lose? The thought of an adventure into the unknown excites you!<BR>The page is still rendered unclear, you could only make out bits and pieces... But one day, you will decipher this page and have a newfound mastery...one day!
 tm.text.TAINTEDMAGIC.2=<IMG>taintedmagic:textures/misc/PageTAINTEDMAGIC.png:0:255:255:255:.5</IMG><BR><BR>Who wrote this?
 
 #SHADOWMETAL
