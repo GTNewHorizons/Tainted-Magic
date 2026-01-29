@@ -36,8 +36,8 @@ public class ItemFocusVisShard extends ItemFocusBasic {
     public static FocusUpgradeType persistant = new FocusUpgradeType(
             69,
             new ResourceLocation("taintedmagic:textures/foci/IconPersistant.png"),
-            "focus.upgrade.persistant.name",
-            "focus.upgrade.persistant.text",
+            "focus.upgrade.persistent.name",
+            "focus.upgrade.persistent.text",
             new AspectList().add(Aspect.ARMOR, 1).add(Aspect.MOTION, 1).add(Aspect.ENERGY, 1));
 
     public ItemFocusVisShard() {
