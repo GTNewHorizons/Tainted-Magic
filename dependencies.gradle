@@ -1,6 +1,7 @@
 // Add your dependencies here
 
 dependencies {
+    api("com.github.GTNewHorizons:GTNHLib:0.9.41:dev")
     api('com.github.GTNewHorizons:Baubles-Expanded:2.2.2-GTNH:dev')
     api('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     api('com.github.GTNewHorizons:ThaumicBoots:1.5.0:dev') {

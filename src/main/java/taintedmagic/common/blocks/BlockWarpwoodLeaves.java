@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.gtnewhorizon.gtnhlib.blocks.util.BFSLeafDecay;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import taintedmagic.common.TaintedMagic;
@@ -25,7 +27,6 @@ import thaumcraft.common.config.ConfigBlocks;
 
 public class BlockWarpwoodLeaves extends Block implements IShearable {
 
-    int[] adjacentTreeBlocks;
     private IIcon opaqueIcon;
     private IIcon transparentIcon;
 
@@ -61,6 +62,7 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         transparentIcon = ir.registerIcon("taintedmagic:BlockWarpwoodLeaves_transparent");
     }
 
+    @Override
     public void breakBlock(World w, int x, int y, int z, Block b, int i) {
         byte var7 = 1;
         int var8 = var7 + 1;
@@ -79,121 +81,17 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         }
     }
 
-    public void updateTick(World w, int x, int y, int z, Random r) {
-        if (!w.isRemote) {
-            int var6 = w.getBlockMetadata(x, y, z);
-
-            if (((var6 & 0x8) != 0) && ((var6 & 0x4) == 0)) {
-                byte var7 = 4;
-                int var8 = var7 + 1;
-                byte var9 = 32;
-                int var10 = var9 * var9;
-                int var11 = var9 / 2;
-
-                if (this.adjacentTreeBlocks == null) {
-                    this.adjacentTreeBlocks = new int[var9 * var9 * var9];
-                }
-
-                if (w.checkChunksExist(x - var8, y - var8, z - var8, x + var8, y + var8, z + var8)) {
-                    for (int var12 = -var7; var12 <= var7; var12++) {
-                        for (int var13 = -var7; var13 <= var7; var13++) {
-                            for (int var14 = -var7; var14 <= var7; var14++) {
-                                Block block = w.getBlock(x + var12, y + var13, z + var14);
-
-                                if ((block != null) && (block.canSustainLeaves(w, x + var12, y + var13, z + var14))) {
-                                    this.adjacentTreeBlocks[((var12 + var11) * var10 + (var13 + var11) * var9
-                                            + var14
-                                            + var11)] = 0;
-                                } else if ((block != null) && (block.isLeaves(w, x + var12, y + var13, z + var14))) {
-                                    this.adjacentTreeBlocks[((var12 + var11) * var10 + (var13 + var11) * var9
-                                            + var14
-                                            + var11)] = -2;
-                                } else {
-                                    this.adjacentTreeBlocks[((var12 + var11) * var10 + (var13 + var11) * var9
-                                            + var14
-                                            + var11)] = -1;
-                                }
-                            }
-                        }
-                    }
-                    int var15 = 0;
-                    for (int var12 = 1; var12 <= 4; var12++) {
-                        for (int var13 = -var7; var13 <= var7; var13++) {
-                            for (int var14 = -var7; var14 <= var7; var14++) {
-                                for (var15 = -var7; var15 <= var7; var15++) {
-                                    if (this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11) * var9
-                                            + var15
-                                            + var11)] != var12 - 1)
-                                        continue;
-                                    if (this.adjacentTreeBlocks[((var13 + var11 - 1) * var10 + (var14 + var11) * var9
-                                            + var15
-                                            + var11)] == -2) {
-                                        this.adjacentTreeBlocks[((var13 + var11 - 1) * var10 + (var14 + var11) * var9
-                                                + var15
-                                                + var11)] = var12;
-                                    }
-
-                                    if (this.adjacentTreeBlocks[((var13 + var11 + 1) * var10 + (var14 + var11) * var9
-                                            + var15
-                                            + var11)] == -2) {
-                                        this.adjacentTreeBlocks[((var13 + var11 + 1) * var10 + (var14 + var11) * var9
-                                                + var15
-                                                + var11)] = var12;
-                                    }
-
-                                    if (this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11 - 1) * var9
-                                            + var15
-                                            + var11)] == -2) {
-                                        this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11 - 1) * var9
-                                                + var15
-                                                + var11)] = var12;
-                                    }
-
-                                    if (this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11 + 1) * var9
-                                            + var15
-                                            + var11)] == -2) {
-                                        this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11 + 1) * var9
-                                                + var15
-                                                + var11)] = var12;
-                                    }
-
-                                    if (this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11) * var9
-                                            + (var15 + var11 - 1))] == -2) {
-                                        this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11) * var9
-                                                + (var15 + var11 - 1))] = var12;
-                                    }
-
-                                    if (this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11) * var9
-                                            + var15
-                                            + var11
-                                            + 1)] != -2)
-                                        continue;
-                                    this.adjacentTreeBlocks[((var13 + var11) * var10 + (var14 + var11) * var9
-                                            + var15
-                                            + var11
-                                            + 1)] = var12;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                int var12 = this.adjacentTreeBlocks[(var11 * var10 + var11 * var9 + var11)];
-
-                if (var12 >= 0) {
-                    w.setBlock(x, y, z, this, var6 & 0xFFFFFFF7, 3);
-                } else {
-                    removeLeaves(w, x, y, z);
-                }
+    @Override
+    public void updateTick(World world, int x, int y, int z, Random r) {
+        if (!world.isRemote) {
+            final int meta = world.getBlockMetadata(x, y, z);
+            if (((meta & 0x8) != 0) && ((meta & 0x4) == 0)) {
+                BFSLeafDecay.handleDecayChecked(this, world, x, y, z, meta, 4);
             }
         }
     }
 
-    private void removeLeaves(World w, int x, int y, int z) {
-        dropBlockAsItem(w, x, y, z, w.getBlockMetadata(x, y, z), 0);
-        w.setBlockToAir(x, y, z);
-    }
-
+    @Override
     public void dropBlockAsItemWithChance(World w, int x, int y, int z, int m, float f, int i) {
         if ((!w.isRemote) && ((m & 0x8) != 0) && ((m & 0x4) == 0)) {
             if (((m & 0x1) == 0) && (w.rand.nextInt(50) == 0)) {
@@ -202,18 +100,22 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         }
     }
 
+    @Override
     public void harvestBlock(World w, EntityPlayer p, int x, int y, int z, int i) {
         super.harvestBlock(w, p, x, y, z, i);
     }
 
+    @Override
     public int damageDropped(int i) {
         return i & 0x1;
     }
 
+    @Override
     public int quantityDropped(Random r) {
         return 0;
     }
 
+    @Override
     public Item getItemDropped(int i, Random r, int i2) {
         return Item.getItemById(0);
     }
@@ -223,6 +125,7 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         return true;
     }
 
+    @Override
     public void beginLeavesDecay(World w, int x, int y, int z) {
         w.setBlockMetadataWithNotify(x, y, z, w.getBlockMetadata(x, y, z) | 0x8, 4);
     }
@@ -232,6 +135,7 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         return 0xFFFFFF;
     }
 
+    @Override
     public ItemStack getPickBlock(MovingObjectPosition t, World w, int x, int y, int z) {
         int m = w.getBlockMetadata(x, y, z);
         return new ItemStack(this, 1, m & 0x1);
@@ -244,6 +148,7 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int colorMultiplier(IBlockAccess w, int x, int y, int z) {
         return 0xFFFFFF;
     }
@@ -253,16 +158,19 @@ public class BlockWarpwoodLeaves extends Block implements IShearable {
         return true;
     }
 
+    @Override
     public ArrayList<ItemStack> onSheared(ItemStack s, IBlockAccess w, int x, int y, int z, int fortune) {
-        ArrayList ret = new ArrayList();
+        ArrayList<ItemStack> ret = new ArrayList<>();
         ret.add(new ItemStack(this, 1, w.getBlockMetadata(x, y, z) & 0x3));
         return ret;
     }
 
+    @Override
     public int getFlammability(IBlockAccess w, int x, int y, int z, ForgeDirection face) {
         return 0;
     }
 
+    @Override
     public int getFireSpreadSpeed(IBlockAccess w, int x, int y, int z, ForgeDirection face) {
         return 0;
     }
