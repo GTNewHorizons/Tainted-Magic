@@ -34,7 +34,7 @@ public class ItemThaumicDisassembler extends Item {
 
     public ItemThaumicDisassembler() {
         this.setCreativeTab(TaintedMagic.tabTaintedMagic);
-        this.setMaxDamage(500);
+        this.setMaxDamage(3000);
         this.setMaxStackSize(1);
         this.setUnlocalizedName("ItemThaumicDisassembler");
         this.setTextureName("taintedmagic:ItemThaumicDisassembler");
@@ -43,6 +43,11 @@ public class ItemThaumicDisassembler extends Item {
     @Override
     public boolean canHarvestBlock(Block b, ItemStack s) {
         return b != Blocks.bedrock;
+    }
+
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass) {
+        return Integer.MAX_VALUE;
     }
 
     @Override
