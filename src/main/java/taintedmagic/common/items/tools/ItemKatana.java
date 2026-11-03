@@ -39,6 +39,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.client.handler.DashboardHud;
 import taintedmagic.client.model.ModelKatana;
 import taintedmagic.client.model.ModelSaya;
 import taintedmagic.common.TaintedMagic;
@@ -273,7 +274,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
         float fract = ticksEquipped / time;
         float a = fract;
 
-        if (b || ticksEquipped != 0) {
+        if ((b || ticksEquipped != 0) && (!TaintedMagic.isDashboardActive || DashboardHud.beginKatanaCharge())) {
             float tickFract = Math.min((float) p.getItemInUseDuration() / 30.0F, 1.0F);
 
             int x = r.getScaledWidth() / 2 + 725;
@@ -329,6 +330,7 @@ public class ItemKatana extends Item implements IWarpingGear, IRepairable {
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             GL11.glPopMatrix();
+            if (TaintedMagic.isDashboardActive) DashboardHud.endRender();
         }
     }
 

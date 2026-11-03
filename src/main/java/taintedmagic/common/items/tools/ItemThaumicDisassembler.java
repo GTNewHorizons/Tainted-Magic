@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import taintedmagic.client.handler.DashboardHud;
 import taintedmagic.common.TaintedMagic;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -172,7 +173,8 @@ public class ItemThaumicDisassembler extends Item {
         ItemStack s = mc.thePlayer.getCurrentEquippedItem();
         FontRenderer f = mc.fontRenderer;
 
-        if (s != null && s.getItem() instanceof ItemThaumicDisassembler) {
+        if (s != null && s.getItem() instanceof ItemThaumicDisassembler
+                && (!TaintedMagic.isDashboardActive || DashboardHud.beginDisassemblerMode())) {
             String str = "\u00A78" + StatCollector.translateToLocal("text.mode")
                     + ": "
                     + getModeName(s)
@@ -198,6 +200,7 @@ public class ItemThaumicDisassembler extends Item {
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             GL11.glPopMatrix();
+            if (TaintedMagic.isDashboardActive) DashboardHud.endRender();
         }
     }
 }
