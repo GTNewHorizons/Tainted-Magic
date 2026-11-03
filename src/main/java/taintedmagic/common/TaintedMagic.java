@@ -57,6 +57,7 @@ public class TaintedMagic {
 
     public static boolean isBootsActive = false;
     public static final String BOOTS = "thaumicboots";
+    public static boolean isDashboardActive = false;
 
     // Pre init
     @EventHandler
@@ -65,6 +66,7 @@ public class TaintedMagic {
         if (Loader.isModLoaded(BOOTS)) {
             isBootsActive = true;
         }
+        isDashboardActive = Loader.isModLoaded("dashboard");
         // Config
         configHandler.config = new Configuration(event.getSuggestedConfigurationFile());
         configHandler.init();
