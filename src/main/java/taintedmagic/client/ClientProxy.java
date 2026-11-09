@@ -7,11 +7,13 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import taintedmagic.client.handler.DashboardHud;
 import taintedmagic.client.handler.HUDHandler;
 import taintedmagic.client.renderer.RenderEntityHomingShard;
 import taintedmagic.client.renderer.RenderEntityTaintBubble;
 import taintedmagic.client.renderer.RenderItemKatana;
 import taintedmagic.common.CommonProxy;
+import taintedmagic.common.TaintedMagic;
 import taintedmagic.common.entities.EntityEldritchOrbAttack;
 import taintedmagic.common.entities.EntityHomingShard;
 import taintedmagic.common.entities.EntityTaintBubble;
@@ -43,6 +45,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerClientHandlers() {
         MinecraftForge.EVENT_BUS.register(new HUDHandler());
+        if (TaintedMagic.isDashboardActive) DashboardHud.register();
     }
 
     @Override
