@@ -20,7 +20,6 @@ public class RecipeRegistry {
 
     public static void init() {
         initCrafting();
-        initSmelting();
         initCrucible();
         initInfusion();
         initArcane();
@@ -81,10 +80,6 @@ public class RecipeRegistry {
                 CraftingManager.getInstance().addRecipe(
                         new ItemStack(BlockRegistry.BlockWarpwoodPlanks, 4),
                         new Object[] { "A", Character.valueOf('A'), new ItemStack(BlockRegistry.BlockWarpwoodLog) }));
-    }
-
-    public static void initSmelting() {
-        GameRegistry.addSmelting(BlockRegistry.BlockShadowOre, new ItemStack(ItemRegistry.ItemMaterial), 2.0F);
     }
 
     public static void initInfusion() {
